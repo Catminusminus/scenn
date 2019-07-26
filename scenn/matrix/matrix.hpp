@@ -2,9 +2,18 @@
 #define SCENN_MATRIX_MATRIX_HPP
 
 #include <array>
+#include <sprout/math.hpp>
 
 // This code is based on
 // https://github.com/ushitora-anqou/constexpr-nn/blob/master/main.cpp
+
+namespace scenn {
+template <class T, class U>
+constexpr auto is_same_value(T lhs, U rhs) {
+  if (sprout::math::abs(lhs - rhs) > 2 * std::numeric_limits<T>::epsilon())
+    return false;
+  return true;
+}
 
 template <size_t M, size_t N, class T>
 struct Matrix;
@@ -21,7 +30,7 @@ struct Matrix {
 
   constexpr Matrix() : data{} { static_assert(N >= 1 && M >= 1); }
 
-  constexpr auto shuffle() { return (*this); }
+  constexpr auto shuffle() const { return (*this); }
 
   template <size_t I, size_t J>
   constexpr auto slice() const {
@@ -43,6 +52,7 @@ struct Matrix {
 
   constexpr auto operator()(size_t i, size_t j) const { return data[i][j]; }
   constexpr decltype(auto) operator()(size_t i, size_t j) { return data[i][j]; }
+
   // for vector-like matrix
   constexpr auto operator()(size_t i) const { return data[0][i]; }
   constexpr decltype(auto) operator()(size_t i) { return data[0][i]; }
@@ -50,9 +60,14 @@ struct Matrix {
   constexpr decltype(auto) operator[](size_t i) { return (*this)(i); }
 
   // for 1-dim vector
-  constexpr auto to_value() const {
+  constexpr auto to_value() const& {
     static_assert(M == 1 && N == 1);
     return (*this)(0);
+  }
+
+  constexpr auto to_value() && {
+    static_assert(M == 1 && N == 1);
+    return std::move(*this)(0);
   }
 
   template <size_t rM>
@@ -81,8 +96,13 @@ struct Matrix {
   }
 
   template <class R>
-  constexpr auto operator-(const R& rhs) const {
+  constexpr auto operator-(const R& rhs) const& {
     return *this + rhs * -1;
+  }
+
+  template <class R>
+  constexpr auto operator-(const R& rhs) && {
+    return std::move(*this) + rhs * -1;
   }
 
   template <class U>
@@ -94,8 +114,13 @@ struct Matrix {
   }
 
   template <class U>
-  constexpr auto operator/(U scalar) const {
+  constexpr auto operator/(U scalar) const& {
     return *this * (1. / scalar);
+  }
+
+  template <class U>
+  constexpr auto operator/(U scalar) && {
+    return std::move(*this) * (1. / scalar);
   }
 
   template <size_t L>
@@ -128,6 +153,7 @@ struct Matrix {
       for (size_t j = 0; j < N; ++j) ret(i, j) = f((*this)(i, j));
     return ret;
   }
+
   constexpr auto argmax() const {
     std::size_t index = 0;
     for (size_t i = 1; i < N; ++i) {
@@ -145,7 +171,7 @@ constexpr auto operator==(const Matrix<lM, lN, lT>& lhs,
 
   for (size_t i = 0; i < lM; ++i)
     for (size_t j = 0; j < lN; ++j)
-      if (lhs.data[i][j] != rhs.data[i][j]) return false;
+      if (!is_same_value(lhs.data[i][j], rhs.data[i][j])) return false;
   return true;
 }
 
@@ -180,5 +206,5 @@ constexpr auto make_zeros_from_pair() {
   T ret[M][N] = {{0}};
   return make_matrix_from_array(ret);
 }
-
+}  // namespace scenn
 #endif

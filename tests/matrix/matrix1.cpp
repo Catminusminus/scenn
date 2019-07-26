@@ -1,6 +1,7 @@
 #include <scenn/matrix/matrix.hpp>
 
 int main() {
+  using namespace scenn;
   // make_matrix_from_array works well
   constexpr int arr2d[2][2] = {{0, 0}, {0, 0}};
   [[maybe_unused]] constexpr auto mat = make_matrix_from_array(arr2d);
