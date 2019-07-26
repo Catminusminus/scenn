@@ -3,7 +3,7 @@
 
 #include <array>
 
-// This code is from
+// This code is based on
 // https://github.com/ushitora-anqou/constexpr-nn/blob/master/main.cpp
 
 template <size_t M, size_t N, class T>
@@ -12,6 +12,11 @@ template <size_t N, class T>
 using Vector = Matrix<1, N, T>;
 template <size_t M, size_t N, class T>
 struct Matrix {
+  static constexpr int m = M;
+  static constexpr int n = N;
+
+  using value_type = T;
+
   T data[M][N];
 
   constexpr Matrix() : data{} { static_assert(N >= 1 && M >= 1); }
@@ -171,7 +176,7 @@ constexpr auto make_vector_from_array(const T (&array)[N]) {
 }
 
 template <size_t M, size_t N, class T>
-constexpr auto make_zeros_from_pair(const std::pair<size_t, size_t>& p) {
+constexpr auto make_zeros_from_pair() {
   T ret[M][N] = {{0}};
   return make_matrix_from_array(ret);
 }
