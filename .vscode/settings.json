@@ -1,0 +1,7 @@
+{
+  "C_Cpp.clang_format_style": "Google",
+  "editor.formatOnSave": true,
+  "[cpp]": {
+    "editor.tabSize": 2
+  }
+}
