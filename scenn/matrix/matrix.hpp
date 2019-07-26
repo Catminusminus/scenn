@@ -127,8 +127,10 @@ struct Matrix {
   constexpr auto dot(const Matrix<N, L, T>& rhs) const {
     Matrix<M, L, T> ret;
     for (size_t i = 0; i < M; ++i)
-      for (size_t j = 0; j < N; ++j)
-        for (size_t k = 0; k < L; ++k) ret(i, k) += (*this)(i, j) * rhs(j, k);
+      for (size_t k = 0; k < L; ++k) {
+        ret(i, k) = 0;
+        for (size_t j = 0; j < N; ++j) ret(i, k) += (*this)(i, j) * rhs(j, k);
+      }
     return ret;
   }
 
