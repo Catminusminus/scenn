@@ -1,6 +1,7 @@
 #ifndef SCENN_LOSS_MSE_HPP
 #define SCENN_LOSS_MSE_HPP
 
+namespace scenn {
 struct MSE {
   template <class T, class U>
   static constexpr auto loss_function(const T& preditions, const U& labels) {
@@ -12,5 +13,5 @@ struct MSE {
     return preditions - labels;
   }
 };
-
+}  // namespace scenn
 #endif
