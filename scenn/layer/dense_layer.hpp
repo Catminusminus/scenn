@@ -39,11 +39,11 @@ struct DenseLayer {
                       make_zeros_from_pair<output_dim, 1>());
   }
   template <class T>
-  constexpr auto make_by_input_data(T &&input_data) {
+  constexpr auto make_by_input_data(T &&input_data) const {
     return DenseLayer(std::forward<T>(input_data), ...);
   }
   template <class T>
-  constexpr auto make_by_input_delta(T &&input_delta) {
+  constexpr auto make_by_input_delta(T &&input_delta) const {
     return DenseLayer(...);
   }
   template <class T>
