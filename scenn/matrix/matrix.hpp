@@ -29,7 +29,6 @@ struct Matrix {
   T data[M][N];
 
   constexpr Matrix() : data{} { static_assert(N >= 1 && M >= 1); }
-
   constexpr auto shuffle() const { return (*this); }
 
   template <size_t I, size_t J>
@@ -162,6 +161,18 @@ struct Matrix {
       if ((*this)(index) < (*this)(i)) index = i;
     }
     return index;
+  }
+
+  constexpr auto get_nth_row(std::size_t index) const {
+    Vector<N, T> ret;
+    for (std::size_t i = 0; i < N; ++i) ret[i] = (*this)(index, i);
+    return ret;
+  }
+
+  constexpr auto get_nth_col(std::size_t index) const {
+    Vector<M, T> ret;
+    for (std::size_t i = 0; i < M; ++i) ret[i] = (*this)(i, index);
+    return ret;
   }
 };
 
