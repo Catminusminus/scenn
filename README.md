@@ -2,12 +2,14 @@
 
 Proof of concept of sequential models of neural networks in compile time.
 
+<strong>This is an alpha-stage PoC.</strong>
+
 ## What is this?
 
 You can build your own constexpr neural networks which run in compile time easily.
 
 ```cpp
-// training and evaluating in compile time
+// training and evaluating an model in compile time
 constexpr auto mnist_data = scenn::load_mini_mnist_data();
 constexpr auto evaluation = scenn::SequentialNetwork(
   CrossEntropy(),
@@ -42,7 +44,7 @@ Thanks to Sprout C++ Library,
 
 Catminusminus
 
-## LiCENSE
+## LICENSE
 
 Unlicense, except for scenn/matrix/matrix.hpp
 

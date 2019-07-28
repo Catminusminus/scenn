@@ -219,5 +219,30 @@ constexpr auto make_zeros_from_pair() {
   T ret[M][N] = {{0}};
   return make_matrix_from_array(ret);
 }
+
+template <typename T>
+constexpr auto false_v = false;
+
+template <std::size_t M, std::size_t N, class NumType>
+constexpr auto make_random_matrix() {
+  float float_array[1000 * 1000] = {
+#include <scenn/matrix/csv/normal_distribution_float.csv>
+  };
+  double double_array[1000 * 1000] = {
+#include <scenn/matrix/csv/normal_distribution_double.csv>
+  };
+  NumType ret[M][N] = {{0}};
+  if constexpr (std::is_same_v<NumType, float>) {
+    for (std::size_t i = 0; i < M; ++i)
+      for (std::size_t j = 0; j < N; ++j) ret[i][j] = float_array[i + M * j];
+    return make_matrix_from_array(ret);
+  } else if constexpr (std::is_same_v<NumType, double>) {
+    for (std::size_t i = 0; i < M; ++i)
+      for (std::size_t j = 0; j < N; ++j) ret[i][j] = double_array[i + M * j];
+    return make_matrix_from_array(ret);
+  }
+  static_assert(false_v<NumType>, "Error: unsupported NumType");
+}
+
 }  // namespace scenn
 #endif

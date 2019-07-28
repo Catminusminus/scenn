@@ -1,6 +1,8 @@
 #ifndef SCENN_MODEL_SEQUENTIAL_NETWORK_HPP
 #define SCENN_MODEL_SEQUENTIAL_NETWORK_HPP
 
+#include <sprout/tuple.hpp>
+
 namespace scenn {
 template <class T, class LossFunction, class... Layers>
 struct SequentialNetwork {
@@ -8,7 +10,7 @@ struct SequentialNetwork {
   LossFunction loss;
   constexpr SequentialNetwork(LossFunction &&loss, Layers &&... layers)
       : loss(std::forward<LossFunction>(loss)),
-        layers(std::make_tuple(std::forward<Layers>(layers)...)){};
+        layers(sprout::make_tuple(std::forward<Layers>(layers)...)){};
   template <size_t index>
   constexpr auto get_forward_input() {
     if (index == 0) return std::get<0>(layers).input_data;
@@ -109,6 +111,7 @@ struct SequentialNetwork {
     for (auto epoch = 0; epoch < epochs; ++epoch) {
       shuffled_training_data = trainging_data.shuffle();
       auto trained = (*this);
+      // TODO
       for (auto k = 0; k < n; k += mini_batch_size) {
         auto trained = trained.train_batch(
             shuffled_training_data.slice(k, k + mini_batch_size),
@@ -128,8 +131,7 @@ struct SequentialNetwork {
   constexpr auto evaluate(Test &&test_data) {
     auto sum = 0;
     for (const auto &&[x, y] : test_data) {
-      if (single_forward(x).argmax() == y.argmax())
-        ;
+      if (single_forward(x).argmax() == y.argmax()) ++sum;
     }
     return sum;
   }
