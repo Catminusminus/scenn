@@ -13,14 +13,14 @@ struct ActivationLayerImpl {
   D input_delta;
   E output_delta;
   constexpr ActivationLayerImpl(const ActivationLayerImpl& other) = default;
-  constexpr ActivationLAyerImpl(ActivationLayerImpl&& other) = default;
+  constexpr ActivationLayerImpl(ActivationLayerImpl&& other) = default;
   constexpr ActivationLayerImpl(A&& activation, B&& input_data, C&& output_data,
                                 D&& input_delta, E&& output_delta)
-      : activation(std::forward<A>(activation)),
-        input_data(std::forward<B>(input_data)),
-        output_data(std::forward<C>(output_data)),
-        input_delta(std::forward<D>(input_delta)),
-        output_delta(std::forward<E>(output_delta)){};
+      : activation(activation),
+        input_data(input_data),
+        output_data(output_data),
+        input_delta(input_delta),
+        output_delta(output_delta){};
   constexpr ActivationLayerImpl(const A& activation, const B& input_data,
                                 const C& output_data, const D& input_delta,
                                 const E& output_delta)

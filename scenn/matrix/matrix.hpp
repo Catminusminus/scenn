@@ -240,8 +240,9 @@ constexpr auto make_random_matrix() {
     for (std::size_t i = 0; i < M; ++i)
       for (std::size_t j = 0; j < N; ++j) ret[i][j] = double_array[i + M * j];
     return make_matrix_from_array(ret);
+  } else {
+    static_assert(false_v<NumType>, "Error: unsupported NumType");
   }
-  static_assert(false_v<NumType>, "Error: unsupported NumType");
 }
 
 }  // namespace scenn

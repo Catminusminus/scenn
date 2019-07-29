@@ -1,3 +1,6 @@
 #include <scenn/layer/dense_layer.hpp>
 
-int main() {}
+int main() {
+  using namespace scenn;
+  constexpr auto dense_layer = DenseLayer<3, 2, float>();
+}
