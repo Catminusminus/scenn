@@ -1,7 +1,7 @@
 RunTests () {
   for file in `\find $1 -maxdepth 1 -type f`; do
     echo $file
-    clang++ $file -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -std=gnu++2a
+    clang++ $file -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -std=gnu++2a -fconstexpr-steps=-1
   done
 }
 

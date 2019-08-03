@@ -8,7 +8,7 @@ int main() {
       scenn::SequentialNetwork(
           CrossEntropy(), DenseLayer(784, 196), ActivationLayer(Sigmoid(), 196),
           DenseLayer(196, 3), ActivationLayer(Sigmoid(), 3))
-          .train(std::move(std::get<0>(mnist_data)), 10, 100, 0.1)
-          .evaluate(std::move(std::get<1>(test_data)));
+          .train<100>(std::move(std::get<0>(mnist_data)), 10, 0.1)
+          .evaluate(std::move(std::get<1>(mnist_data)));
   std::cout << evaluation << std::end;
 }

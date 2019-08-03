@@ -2,7 +2,7 @@
 
 Proof of concept of sequential models of neural networks in compile time.
 
-<strong>This is an alpha-stage PoC.</strong>
+<strong>Alpha Stage</strong>
 
 ## What is this?
 
@@ -29,16 +29,25 @@ std::cout << evaluation << std::end;
 
 ## How to use?
 
-Enjoy!
+<strong>Now writing...</strong>
 
 ## Limitaion
 
-So much limitaion exist...
+So many limitaions exist...
+
+- Only 1D data can be used.
+- Now writing...
 
 ## How it works?
 
-In fact, this is an of dlgo.
-Thanks to Sprout C++ Library,
+Thanks to [Sprout C++ Library](https://github.com/bolero-MURAKAMI/Sprout)
+
+## Important Disclosure
+
+This project is inspired by a neural network in [dlgo](https://github.com/maxpumperla/deep_learning_and_the_game_of_go/tree/master/code/dlgo/nn).
+
+scenn/matrix/matrix.hpp is based on https://github.com/ushitora-anqou/constexpr-nn/blob/master/main.cpp.
+The license file is LICENSE.constexpr-nn.
 
 ## Author
 
@@ -46,6 +55,4 @@ Catminusminus
 
 ## LICENSE
 
-Unlicense, except for scenn/matrix/matrix.hpp
-
-scenn/matrix/matrix.hpp is under MIT License. See scenn/matrix/matrix.hpp and https://github.com/ushitora-anqou/constexpr-nn
+MIT

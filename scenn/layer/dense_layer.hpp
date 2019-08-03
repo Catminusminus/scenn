@@ -16,8 +16,8 @@ struct DenseLayerImpl {
   F bias;
   G delta_w;
   H delta_b;
-  constexpr DenseLayerImpl(const DenseLayerImpl& other) = default;
-  constexpr DenseLayerImpl(DenseLayerImpl&& other) = default;
+  // constexpr DenseLayerImpl(const DenseLayerImpl& other) = default;
+  // constexpr DenseLayerImpl(DenseLayerImpl&& other) = default;
   constexpr DenseLayerImpl(A&& input_data, B&& output_data, C&& input_delta,
                            D&& output_delta, E&& weight, F&& bias, G&& delta_w,
                            H&& delta_b)
@@ -43,26 +43,30 @@ struct DenseLayerImpl {
         delta_b(delta_b){};
   template <class T>
   constexpr auto make_by_input_data(T&& input_data) const& {
-    return DenseLayerImpl<T, B, C, D, E, F, G, H, InputDim, OutputDim, NumType>(
+    return DenseLayerImpl<std::remove_reference_t<T>, B, C, D, E, F, G, H,
+                          InputDim, OutputDim, NumType>(
         std::forward<T>(input_data), output_data, input_delta, output_delta,
         weight, bias, delta_w, delta_b);
   }
   template <class T>
   constexpr auto make_by_input_data(T&& input_data) && {
-    return DenseLayerImpl<T, B, C, D, E, F, G, H, InputDim, OutputDim, NumType>(
+    return DenseLayerImpl<std::remove_reference_t<T>, B, C, D, E, F, G, H,
+                          InputDim, OutputDim, NumType>(
         std::forward<T>(input_data), std::move(output_data),
         std::move(input_delta), std::move(output_delta), std::move(weight),
         std::move(bias), std::move(delta_w), std::move(delta_b));
   }
   template <class T>
   constexpr auto make_by_input_delta(T&& input_delta) const& {
-    return DenseLayerImpl<A, B, T, D, E, F, G, H, InputDim, OutputDim, NumType>(
+    return DenseLayerImpl<A, B, std::remove_reference_t<T>, D, E, F, G, H,
+                          InputDim, OutputDim, NumType>(
         input_data, output_data, std::forward<T>(input_delta), output_delta,
         weight, bias, delta_w, delta_b);
   }
   template <class T>
   constexpr auto make_by_input_delta(T&& input_delta) && {
-    return DenseLayerImpl<A, B, T, D, E, F, G, H, InputDim, OutputDim, NumType>(
+    return DenseLayerImpl<A, B, std::remove_reference_t<T>, D, E, F, G, H,
+                          InputDim, OutputDim, NumType>(
         std::move(input_data), std::move(output_data),
         std::forward<T>(input_delta), std::move(output_delta),
         std::move(weight), std::move(bias), std::move(delta_w),
@@ -78,7 +82,8 @@ struct DenseLayerImpl {
   template <class T>
   constexpr auto forward(T&& data) && {
     auto new_output_data = weight.dot(std::forward<T>(data)) + bias;
-    return DenseLayerImpl<A, decltype(new_output_data), C, D, E, F, G, H, InputDim, OutputDim, NumType>(
+    return DenseLayerImpl<A, decltype(new_output_data), C, D, E, F, G, H,
+                          InputDim, OutputDim, NumType>(
         std::move(input_data), std::move(new_output_data),
         std::move(input_delta), std::move(output_delta), std::move(weight),
         std::move(bias), std::move(delta_w), std::move(delta_b));
@@ -86,26 +91,29 @@ struct DenseLayerImpl {
   template <class T, class U>
   constexpr auto backward(T&& data, U&& delta) const& {
     return DenseLayerImpl<A, B, C, decltype(weight.transposed().dot(delta)), E,
-                          F, decltype(delta_w + delta.dot(data.transpose())),
-                          decltype(delta_b + delta), InputDim, OutputDim, NumType>(
+                          F, decltype(delta_w + delta.dot(data.transposed())),
+                          decltype(delta_b + delta), InputDim, OutputDim,
+                          NumType>(
         input_data, output_data, input_delta, weight.transposed().dot(delta),
-        weight, bias, delta_w + delta.dot(data.transpose()), delta_b + delta);
+        weight, bias, delta_w + delta.dot(data.transposed()), delta_b + delta);
   }
   template <class T, class U>
   constexpr auto backward(T&& data, U&& delta) && {
     auto new_output_delta = weight.transposed().dot(delta);
     auto new_delta_w =
-        std::move(delta_w) + delta.dot(std::move(data).transpose());
+        std::move(delta_w) + delta.dot(std::move(data).transposed());
     auto new_delta_b = std::move(delta_b) + std::forward<U>(delta);
     return DenseLayerImpl<A, B, C, decltype(new_output_delta), E, F,
-                          decltype(new_delta_w), decltype(new_delta_b), InputDim, OutputDim, NumType>(
+                          decltype(new_delta_w), decltype(new_delta_b),
+                          InputDim, OutputDim, NumType>(
         input_data, output_data, input_delta, std::move(new_output_delta),
         weight, bias, std::move(new_delta_w), std::move(new_delta_b));
   }
   template <class T>
   constexpr auto update_params(T&& rate) const& {
     return DenseLayerImpl<A, B, C, D, decltype(weight - delta_w * rate),
-                          decltype(bias - delta_b * rate), G, H, InputDim, OutputDim, NumType>(
+                          decltype(bias - delta_b * rate), G, H, InputDim,
+                          OutputDim, NumType>(
         input_data, output_data, input_delta, output_delta,
         weight - delta_w * rate, bias - delta_b * rate, delta_w, delta_b);
   }
@@ -114,7 +122,8 @@ struct DenseLayerImpl {
     auto new_weight = weight - delta_w * rate;
     auto new_bias = bias - delta_b * std::forward<T>(rate);
     return DenseLayerImpl<A, B, C, D, decltype(weight - delta_w * rate),
-                          decltype(bias - delta_b * rate), G, H, InputDim, OutputDim, NumType>(
+                          decltype(bias - delta_b * rate), G, H, InputDim,
+                          OutputDim, NumType>(
         std::move(input_data), std::move(output_data), std::move(input_delta),
         std::move(output_delta), std::move(new_weight), std::move(new_bias),
         std::move(delta_w), std::move(delta_b));
@@ -123,7 +132,8 @@ struct DenseLayerImpl {
     return DenseLayerImpl<
         A, B, C, D, E, F,
         decltype(make_zeros_from_pair<OutputDim, InputDim, NumType>()),
-        decltype(make_zeros_from_pair<OutputDim, 1, NumType>()), InputDim, OutputDim, NumType>(
+        decltype(make_zeros_from_pair<OutputDim, 1, NumType>()), InputDim,
+        OutputDim, NumType>(
         input_data, output_data, input_delta, output_delta, weight, bias,
         make_zeros_from_pair<OutputDim, InputDim, NumType>(),
         make_zeros_from_pair<OutputDim, 1, NumType>());
@@ -132,7 +142,8 @@ struct DenseLayerImpl {
     return DenseLayerImpl<
         A, B, C, D, E, F,
         decltype(make_zeros_from_pair<OutputDim, InputDim, NumType>()),
-        decltype(make_zeros_from_pair<OutputDim, 1, NumType>()), InputDim, OutputDim, NumType>(
+        decltype(make_zeros_from_pair<OutputDim, 1, NumType>()), InputDim,
+        OutputDim, NumType>(
         std::move(input_data), std::move(output_data), std::move(input_delta),
         std::move(output_delta), std::move(weight), std::move(bias),
         make_zeros_from_pair<OutputDim, InputDim, NumType>(),
@@ -143,12 +154,18 @@ struct DenseLayerImpl {
 template <std::size_t InputDim, std::size_t OutputDim, class NumType>
 constexpr auto DenseLayer() {
   return DenseLayerImpl<
-      int, int, int, int,
+      decltype(make_zeros_from_pair<InputDim, 1, NumType>()),
+      decltype(make_zeros_from_pair<OutputDim, 1, NumType>()),
+      decltype(make_zeros_from_pair<InputDim, 1, NumType>()),
+      decltype(make_zeros_from_pair<InputDim, 1, NumType>()),
       decltype(make_random_matrix<OutputDim, InputDim, NumType>()),
       decltype(make_random_matrix<OutputDim, 1, NumType>()),
       decltype(make_zeros_from_pair<OutputDim, InputDim, NumType>()),
       decltype(make_zeros_from_pair<OutputDim, 1, NumType>()), InputDim,
-      OutputDim, NumType>(1, 1, 1, 1,
+      OutputDim, NumType>(make_zeros_from_pair<InputDim, 1, NumType>(),
+                          make_zeros_from_pair<OutputDim, 1, NumType>(),
+                          make_zeros_from_pair<InputDim, 1, NumType>(),
+                          make_zeros_from_pair<InputDim, 1, NumType>(),
                           make_random_matrix<OutputDim, InputDim, NumType>(),
                           make_random_matrix<OutputDim, 1, NumType>(),
                           make_zeros_from_pair<OutputDim, InputDim, NumType>(),

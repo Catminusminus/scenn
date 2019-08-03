@@ -7,6 +7,7 @@
 #include <sprout/utility.hpp>
 #include <sprout/utility/pair/pair.hpp>
 #include <utility>
+#include <tuple>
 
 namespace {
 template <size_t M, size_t N, size_t O, class T, class U>
@@ -26,15 +27,24 @@ struct Dataset {
       data;
   constexpr Dataset(
       std::array<sprout::pair<scenn::Matrix<1, N, T>, scenn::Matrix<1, O, U>>,
-                 M>&& data)
-      : data(std::forward<std::array<
-                 sprout::pair<scenn::Matrix<1, N, T>, scenn::Matrix<1, O, U>>,
-                 M>>(data)){};
+                 M>&& data): data(data){};
+  constexpr Dataset(
+      std::array<const sprout::pair<scenn::Matrix<1, N, T>, scenn::Matrix<1, O, U>>,
+                 M>& data): data(data){};
   constexpr Dataset(scenn::Matrix<M, N, T>&& x, scenn::Matrix<M, O, U>&& y)
-      : data(make_dataset(std::forward<scenn::Matrix<M, N, T>>(x),
-                          std::forward<scenn::Matrix<M, O, U>>(y))){};
-  constexpr auto get_data() const { return data; }
-  constexpr auto shuffule() { return (*this); }
+      : data(make_dataset(std::move(x),std::move(y))){};
+  constexpr Dataset(const scenn::Matrix<M, N, T>& x, const scenn::Matrix<M, O, U>& y)
+      : data(make_dataset(x,y)){};
+  constexpr auto get_data() const& { return data; }
+  constexpr auto get_data() && { return std::move(data); }
+  constexpr auto shuffle() const { return (*this); }
+  //constexpr auto length() const { return M; }
+  static constexpr auto length() {
+    return M;
+  }
+  constexpr auto shape() const {
+    return std::make_pair(M, N);
+  }
   template <size_t I, size_t J>
   constexpr auto slice() const {
     // return Dataset(sprout::sub_array(data, i, j));
