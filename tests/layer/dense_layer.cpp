@@ -2,5 +2,5 @@
 
 int main() {
   using namespace scenn;
-  constexpr auto dense_layer = DenseLayer<3, 2, float>();
+  [[maybe_unused]] constexpr auto dense_layer = DenseLayer<3, 2, float>();
 }

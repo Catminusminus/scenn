@@ -5,7 +5,7 @@
 
 int main() {
   using namespace scenn;
-  [[maybe_unused]] constexpr auto model = SequentialNetwork(
+  [[maybe_unused]] SCENN_CONSTEXPR auto model = SequentialNetwork(
     CrossEntropy(), DenseLayer<2, 2, float>(), ActivationLayer<2, float>(Sigmoid())
   );
 }
