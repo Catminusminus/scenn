@@ -1,3 +1,8 @@
 **/a.out
 **/*/gch
 .vscode/
+**/x_test
+**/x_train
+**/y_test
+**/y_train
+**/mnist.npz

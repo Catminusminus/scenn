@@ -1,14 +1,18 @@
 #include <iostream>
-#include <load.hpp>
-#include <scenn.hpp>
+#include <scenn/load.hpp>
+#include <scenn/scenn.hpp>
+
+SCENN_CONSTEXPR auto mini_mnist_test() {
+  using namespace scenn;
+  auto mnist_data = load_mini_mnist_data<double>();
+  auto evaluation = SequentialNetwork(
+    CrossEntropy(), DenseLayer<784, 196, double>(), ActivationLayer<196, double>(Sigmoid()),
+    DenseLayer<196, 3, double>(), ActivationLayer<3, double>(Sigmoid())
+  ).train<100>(std::move(sprout::get<0>(mnist_data)), 10, 0.1).evaluate(std::move(sprout::get<1>(mnist_data)));
+  return evaluation;
+}
 
 int main() {
-  constexpr auto mnist_data = scenn::load_mini_mnist_data();
-  constexpr auto evaluation =
-      scenn::SequentialNetwork(
-          CrossEntropy(), DenseLayer(784, 196), ActivationLayer(Sigmoid(), 196),
-          DenseLayer(196, 3), ActivationLayer(Sigmoid(), 3))
-          .train<100>(std::move(std::get<0>(mnist_data)), 10, 0.1)
-          .evaluate(std::move(std::get<1>(mnist_data)));
-  std::cout << evaluation << std::end;
+  SCENN_CONSTEXPR auto evaluation = mini_mnist_test();
+  std::cout << evaluation << std::endl;
 }

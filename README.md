@@ -10,21 +10,47 @@ You can build your own constexpr neural networks which run in compile time easil
 
 ```cpp
 // training and evaluating an model in compile time
-constexpr auto mnist_data = scenn::load_mini_mnist_data();
-constexpr auto evaluation = scenn::SequentialNetwork(
-  CrossEntropy(),
-  DenseLayer(784, 196),
-  ActivationLayer(Sigmoid(), 196),
-  DenseLayer(196, 3),
-  ActivationLayer(Sigmoid(), 3)
-).train(
-  std::move(std::get<0>(mnist_data)), 10, 100, 0.1
-).evaluate(
-  std::move(std::get<1>(test_data))
-);
+SCENN_CONSTEXPR auto test() {
+  using namespace scenn;
+  double X_arr[4][2] = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+  double Y_arr[4][2] = {{1, 0}, {0, 1}, {0, 1}, {1, 0}};
+  auto dataset = Dataset(make_matrix_from_array(std::move(X_arr)),
+              make_matrix_from_array(std::move(Y_arr)));
+  auto trained_model =
+      SequentialNetwork(BinaryCrossEntropy(), DenseLayer<2, 4, double>(),
+                        ActivationLayer<4, double>(Sigmoid()),
+                        DenseLayer<4, 2, double>(10),
+                        ActivationLayer<2, double>(Sigmoid()))
+          .train<2>(dataset,
+                    2000, 0.1);
+  return trained_model.evaluate(std::move(dataset));
+}
 
+int main() {
+  SCENN_CONSTEXPR auto evaluation = test();
+  std::cout << evaluation; // 4
+}
 
-std::cout << evaluation << std::end;
+```
+
+<strong>WIP</strong>
+The blow code should be worked, but fails dut to the constexpr evaluation step limit. In run time, it hits stack-overflow. We suspect that the mnist_data is too large, however, we can not use `ulimit -s unlimited` in WSL, so it is not sure yet. We are developping this issue now.
+```cpp
+// training and evaluating an model in compile time
+SCENN_CONSTEXPR auto mini_mnist_test() {
+  using namespace scenn;
+  auto mnist_data = load_mini_mnist_data<double>();
+  auto evaluation = SequentialNetwork(
+    CrossEntropy(), DenseLayer<784, 196, double>(), ActivationLayer<196, double>(Sigmoid()),
+    DenseLayer<196, 3, double>(), ActivationLayer<3, double>(Sigmoid())
+  ).train<100>(std::move(sprout::get<0>(mnist_data)), 10, 0.1).evaluate(std::move(sprout::get<1>(mnist_data)));
+  return evaluation;
+}
+
+int main() {
+  SCENN_CONSTEXPR auto evaluation = mini_mnist_test();
+  std::cout << evaluation << std::endl;
+}
 ```
 
 ## How to use?

@@ -168,6 +168,13 @@ struct Matrix {
     return ret;
   }
 
+  SCENN_CONSTEXPR auto sum() const {
+    T ret = 0;
+    for (std::size_t i = 0; i < M; ++i)
+      for (std::size_t j = 0; j < N; ++j) ret += (*this)(i, j);
+    return ret;
+  }
+
   SCENN_CONSTEXPR auto argmax() const {
     std::size_t index = 0;
     static_assert(M == 1);
