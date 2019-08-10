@@ -34,7 +34,7 @@ int main() {
 ```
 
 <strong>WIP</strong>
-The blow code should be worked, but fails dut to the constexpr evaluation step limit. In run time, it hits stack-overflow. We suspect that the mnist_data is too large, however, we can not use `ulimit -s unlimited` in WSL, so it is not sure yet. We are developping this issue now.
+The blow code should be worked, but fails dut to the constexpr evaluation step limit. Even in run time, it hits stack-overflow. We suspect that the mnist_data is too large, however, we can not use `ulimit -s unlimited` in WSL, so it is not sure yet. We are developping this issue now.
 ```cpp
 // training and evaluating an model in compile time
 SCENN_CONSTEXPR auto mini_mnist_test() {
@@ -62,6 +62,7 @@ int main() {
 So many limitaions exist...
 
 - Only 1D data can be used.
+- Softmax is not implemented yet. Do not use it in this repository.
 - Now writing...
 
 ## How it works?
