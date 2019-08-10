@@ -4,6 +4,8 @@ Proof of concept of sequential models of neural networks in compile time.
 
 <strong>Alpha Stage</strong>
 
+<strong>Any contributions are greatly welcomed. Thank you.</strong>
+
 ## What is this?
 
 You can build your own constexpr neural networks which run in compile time easily.
