@@ -36,7 +36,7 @@ int main() {
 ```
 
 <strong>WIP</strong>
-The blow code should be worked, but fails dut to the constexpr evaluation step limit. Even in run time, it hits stack-overflow. We suspect that the mnist_data is too large, however, we can not use `ulimit -s unlimited` in WSL, so it is not sure yet. We are developping this issue now.
+The blow code should be worked, but fails due to hitting the constexpr evaluation step limit. Even in run time, it hits stack-overflow. We suspect that the mnist_data is too large, however, we can not use `ulimit -s unlimited` in WSL, so it is not sure yet. We are developping this issue now.
 ```cpp
 // training and evaluating an model in compile time
 SCENN_CONSTEXPR auto mini_mnist_test() {
@@ -58,6 +58,16 @@ int main() {
 ## How to use?
 
 <strong>Now writing...</strong>
+
+### Requirements
+
+- [Sprout C++ Library](https://github.com/bolero-MURAKAMI/Sprout)
+
+### Install
+
+This library is a header-only library.
+
+Include ```<scenn/scenn.hpp>``` and you can use all things provided by scenn except for ```load_mini_mnist_data```.
 
 ## Limitaion
 
