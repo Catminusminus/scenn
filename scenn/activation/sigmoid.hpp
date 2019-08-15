@@ -30,6 +30,10 @@ struct Sigmoid {
   SCENN_CONSTEXPR auto activate_prime(const Matrix<M, N, T>& container) const {
     return container.fmap([](auto&& x) { return sigmoid_prime<T>(x); });
   }
+  template <class T, class U>
+  SCENN_CONSTEXPR auto calc_backward_pass(T&& data, U&& delta) const {
+    return activate_prime(std::forward<U>(data)) * (std::forward<T>(delta));
+  }
 };
 }  // namespace scenn
 

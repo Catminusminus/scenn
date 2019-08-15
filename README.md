@@ -10,6 +10,7 @@ Proof of concept of sequential models of neural networks in compile time.
 
 You can build your own constexpr neural networks which run in compile time easily.
 
+<strong>XOR Example:</strong>
 ```cpp
 // training and evaluating an model in compile time
 SCENN_CONSTEXPR auto test() {
@@ -36,7 +37,7 @@ int main() {
 ```
 
 <strong>WIP</strong>
-The blow code should be worked, but fails due to hitting the constexpr evaluation step limit. Even in run time, it hits stack-overflow. We suspect that the mnist_data is too large, however, we can not use `ulimit -s unlimited` in WSL, so it is not sure yet. We are developping this issue now.
+The blow code should be worked, but fails due to hitting the constexpr evaluation step limit.
 ```cpp
 // training and evaluating an model in compile time
 SCENN_CONSTEXPR auto mini_mnist_test() {
@@ -74,7 +75,8 @@ Include ```<scenn/scenn.hpp>``` and you can use all things provided by scenn exc
 So many limitaions exist...
 
 - Only 1D data can be used.
-- Softmax is not implemented yet. Do not use it in this repository.
+- Hittig the constexpr evaluation step limit easily.
+  - We are preparing a patch for newer clang based on https://github.com/ushitora-anqou/constexpr-nn/blob/master/clang.diff.
 - Now writing...
 
 ## How it works?

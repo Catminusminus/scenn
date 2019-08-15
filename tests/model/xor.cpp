@@ -23,5 +23,5 @@ SCENN_CONSTEXPR auto test() {
 
 int main() {
   SCENN_CONSTEXPR auto evaluation = test();
-  std::cout << evaluation;
+  std::cout << evaluation << std::endl;
 }

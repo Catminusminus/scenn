@@ -53,23 +53,17 @@ struct ActivationLayerImpl {
   template <class T, class U>
   SCENN_CONSTEXPR auto backward(T&& data, U&& delta) const& {
     return ActivationLayerImpl<A, B, C, D,
-                               decltype(activation.activate_prime(
-                                            std::forward<U>(data)) *
-                                        (std::forward<T>(delta)))>(
+                               decltype(activation.calc_backward_pass(std::forward<U>(data), std::forward<T>(delta)))>(
         activation, input_data, output_data, input_delta,
-        activation.activate_prime(std::forward<U>(data)) *
-            (std::forward<T>(delta)));
+        activation.calc_backward_pass(std::forward<U>(data), std::forward<T>(delta)));
   }
   template <class T, class U>
   SCENN_CONSTEXPR auto backward(T&& data, U&& delta) && {
     return ActivationLayerImpl<A, B, C, D,
-                               decltype(activation.activate_prime(
-                                            std::forward<U>(data)) *
-                                        (std::forward<T>(delta)))>(
+                               decltype(activation.calc_backward_pass(std::forward<U>(data), std::forward<T>(delta)))>(
         std::move(activation), std::move(input_data), std::move(output_data),
         std::move(input_delta),
-        activation.activate_prime(std::forward<U>(data)) *
-            (std::forward<T>(delta)));
+        activation.calc_backward_pass(std::forward<U>(data), std::forward<T>(delta)));
   }
   template <class T>
   SCENN_CONSTEXPR auto make_by_input_data(T&& input_data) const& {
