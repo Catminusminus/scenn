@@ -1,4 +1,3 @@
 #include <scenn/activation/sigmoid.hpp>
 
-int main() {
-}
+int main() {}

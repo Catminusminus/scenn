@@ -6,7 +6,7 @@
 #include <utility>
 
 namespace scenn {
-  namespace detail {
+namespace detail {
 // A must has an activation method and an activation_prime method
 template <class A, class B, class C, class D, class E>
 struct ActivationLayerImpl {
@@ -53,17 +53,23 @@ struct ActivationLayerImpl {
   template <class T, class U>
   SCENN_CONSTEXPR auto backward(T&& data, U&& delta) const& {
     return ActivationLayerImpl<A, B, C, D,
-                               decltype(activation.calc_backward_pass(std::forward<U>(data), std::forward<T>(delta)))>(
+                               decltype(activation.calc_backward_pass(
+                                   std::forward<U>(data),
+                                   std::forward<T>(delta)))>(
         activation, input_data, output_data, input_delta,
-        activation.calc_backward_pass(std::forward<U>(data), std::forward<T>(delta)));
+        activation.calc_backward_pass(std::forward<U>(data),
+                                      std::forward<T>(delta)));
   }
   template <class T, class U>
   SCENN_CONSTEXPR auto backward(T&& data, U&& delta) && {
     return ActivationLayerImpl<A, B, C, D,
-                               decltype(activation.calc_backward_pass(std::forward<U>(data), std::forward<T>(delta)))>(
+                               decltype(activation.calc_backward_pass(
+                                   std::forward<U>(data),
+                                   std::forward<T>(delta)))>(
         std::move(activation), std::move(input_data), std::move(output_data),
         std::move(input_delta),
-        activation.calc_backward_pass(std::forward<U>(data), std::forward<T>(delta)));
+        activation.calc_backward_pass(std::forward<U>(data),
+                                      std::forward<T>(delta)));
   }
   template <class T>
   SCENN_CONSTEXPR auto make_by_input_data(T&& input_data) const& {
@@ -101,14 +107,14 @@ struct ActivationLayerImpl {
     return std::move(*this);
   }
 };
-  } // namespace detail
+}  // namespace detail
 template <std::size_t Dim, class NumType, class Loss>
 SCENN_CONSTEXPR auto ActivationLayer(Loss&& loss) {
-  return detail::ActivationLayerImpl<Loss,
-                             decltype(make_zeros_from_pair<Dim, 1, NumType>()),
-                             decltype(make_zeros_from_pair<Dim, 1, NumType>()),
-                             decltype(make_zeros_from_pair<Dim, 1, NumType>()),
-                             decltype(make_zeros_from_pair<Dim, 1, NumType>())>(
+  return detail::ActivationLayerImpl<
+      Loss, decltype(make_zeros_from_pair<Dim, 1, NumType>()),
+      decltype(make_zeros_from_pair<Dim, 1, NumType>()),
+      decltype(make_zeros_from_pair<Dim, 1, NumType>()),
+      decltype(make_zeros_from_pair<Dim, 1, NumType>())>(
       std::forward<Loss>(loss), make_zeros_from_pair<Dim, 1, NumType>(),
       make_zeros_from_pair<Dim, 1, NumType>(),
       make_zeros_from_pair<Dim, 1, NumType>(),

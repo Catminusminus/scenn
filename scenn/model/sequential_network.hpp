@@ -16,7 +16,7 @@ struct SequentialNetwork {
                                     const Layers &... layers)
       : loss(loss), layers(sprout::make_tuple(layers...)){};
   template <size_t index>
-  SCENN_CONSTEXPR auto get_forward_input(const T& some_layers) const {
+  SCENN_CONSTEXPR auto get_forward_input(const T &some_layers) const {
     if constexpr (index == 0) {
       return sprout::get<index>(some_layers).input_data;
     } else {
@@ -24,7 +24,7 @@ struct SequentialNetwork {
     }
   }
   template <size_t index>
-  SCENN_CONSTEXPR auto get_backward_input(const T& some_layers) const {
+  SCENN_CONSTEXPR auto get_backward_input(const T &some_layers) const {
     if constexpr (index + 1 == std::tuple_size_v<T>) {
       return sprout::get<index>(some_layers).input_delta;
     } else {
@@ -73,7 +73,8 @@ struct SequentialNetwork {
   SCENN_CONSTEXPR auto forward_impl(T &new_layers, T &old_layers) const {
     if constexpr (index < std::tuple_size_v<T>) {
       sprout::get<index>(new_layers) =
-          sprout::get<index>(old_layers).forward(get_forward_input<index>(old_layers));
+          sprout::get<index>(old_layers)
+              .forward(get_forward_input<index>(old_layers));
       forward_impl<index + 1>(new_layers, old_layers);
     }
   }
@@ -82,7 +83,8 @@ struct SequentialNetwork {
   SCENN_CONSTEXPR auto backward_impl(T &new_layers, T &old_layers) const {
     sprout::get<index>(new_layers) =
         sprout::get<index>(old_layers)
-            .backward(get_forward_input<index>(old_layers), get_backward_input<index>(old_layers));
+            .backward(get_forward_input<index>(old_layers),
+                      get_backward_input<index>(old_layers));
     if constexpr (index > 0) {
       backward_impl<index - 1>(new_layers, old_layers);
     }
@@ -137,9 +139,9 @@ struct SequentialNetwork {
     auto trained = (*this);
     for (std::size_t epoch = 0; epoch < epochs; ++epoch) {
       auto shuffled_training_data = training_data.shuffle(epoch);
-      train_impl<0, N, MiniBatchSize, std::remove_reference_t<Train>&&, T, decltype(trained)>(
-          std::move(shuffled_training_data), std::forward<T>(learning_rate),
-          trained);
+      train_impl<0, N, MiniBatchSize, std::remove_reference_t<Train> &&, T,
+                 decltype(trained)>(std::move(shuffled_training_data),
+                                    std::forward<T>(learning_rate), trained);
     }
     return trained;
   }

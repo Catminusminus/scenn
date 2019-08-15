@@ -262,11 +262,13 @@ SCENN_CONSTEXPR auto make_random_matrix(std::size_t n = 0) {
   NumType ret[M][N] = {{0}};
   if constexpr (std::is_same_v<NumType, float>) {
     for (std::size_t i = 0; i < M; ++i)
-      for (std::size_t j = 0; j < N; ++j) ret[i][j] = float_array[i + M * (j + n)];
+      for (std::size_t j = 0; j < N; ++j)
+        ret[i][j] = float_array[i + M * (j + n)];
     return make_matrix_from_array(ret);
   } else if constexpr (std::is_same_v<NumType, double>) {
     for (std::size_t i = 0; i < M; ++i)
-      for (std::size_t j = 0; j < N; ++j) ret[i][j] = double_array[i + M * (j + n)];
+      for (std::size_t j = 0; j < N; ++j)
+        ret[i][j] = double_array[i + M * (j + n)];
     return make_matrix_from_array(ret);
   } else {
     static_assert(false_v<NumType>, "Error: unsupported NumType");

@@ -5,7 +5,7 @@
 #include <utility>
 
 namespace scenn {
-  namespace detail {
+namespace detail {
 template <class A, class B, class C, class D, class E, class F, class G,
           class H, std::size_t InputDim, std::size_t OutputDim, class NumType>
 struct DenseLayerImpl {
@@ -151,7 +151,7 @@ struct DenseLayerImpl {
         make_zeros_from_pair<OutputDim, 1, NumType>());
   }
 };
-  } // namespace detail
+}  // namespace detail
 template <std::size_t InputDim, std::size_t OutputDim, class NumType>
 SCENN_CONSTEXPR auto DenseLayer(std::size_t seed = 0) {
   return detail::DenseLayerImpl<
@@ -163,14 +163,15 @@ SCENN_CONSTEXPR auto DenseLayer(std::size_t seed = 0) {
       decltype(make_random_matrix<OutputDim, 1, NumType>()),
       decltype(make_zeros_from_pair<OutputDim, InputDim, NumType>()),
       decltype(make_zeros_from_pair<OutputDim, 1, NumType>()), InputDim,
-      OutputDim, NumType>(make_zeros_from_pair<InputDim, 1, NumType>(),
-                          make_zeros_from_pair<OutputDim, 1, NumType>(),
-                          make_zeros_from_pair<InputDim, 1, NumType>(),
-                          make_zeros_from_pair<InputDim, 1, NumType>(),
-                          make_random_matrix<OutputDim, InputDim, NumType>(1 + seed),
-                          make_random_matrix<OutputDim, 1, NumType>(3 + seed),
-                          make_zeros_from_pair<OutputDim, InputDim, NumType>(),
-                          make_zeros_from_pair<OutputDim, 1, NumType>());
+      OutputDim, NumType>(
+      make_zeros_from_pair<InputDim, 1, NumType>(),
+      make_zeros_from_pair<OutputDim, 1, NumType>(),
+      make_zeros_from_pair<InputDim, 1, NumType>(),
+      make_zeros_from_pair<InputDim, 1, NumType>(),
+      make_random_matrix<OutputDim, InputDim, NumType>(1 + seed),
+      make_random_matrix<OutputDim, 1, NumType>(3 + seed),
+      make_zeros_from_pair<OutputDim, InputDim, NumType>(),
+      make_zeros_from_pair<OutputDim, 1, NumType>());
 }
 
 template <std::size_t InputDim, std::size_t OutputDim, class NumType>

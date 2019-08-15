@@ -11,12 +11,18 @@ struct BinaryCrossEntropy {
   static SCENN_CONSTEXPR auto loss_function(const Vector<N, T>& predictions,
                                             const Vector<N, U>& labels) {
     return -labels.dot(predictions.fmap(sprout::math::log<T>).transposed())
-                .to_value() - ((labels * (-1) + 1.0).dot((predictions * (-1) + 1.0).fmap(sprout::math::log<T>).transposed())).to_value();
+                .to_value() -
+           ((labels * (-1) + 1.0)
+                .dot((predictions * (-1) + 1.0)
+                         .fmap(sprout::math::log<T>)
+                         .transposed()))
+               .to_value();
   }
   template <class T, class U>
   static SCENN_CONSTEXPR auto loss_derivative(const T& predictions,
                                               const U& labels) {
-    return ((labels / predictions) * (-1)) + ((labels * (-1) + 1.0) / (predictions * (-1) + 1.0));
+    return ((labels / predictions) * (-1)) +
+           ((labels * (-1) + 1.0) / (predictions * (-1) + 1.0));
   }
 };
 }  // namespace scenn
