@@ -184,6 +184,14 @@ struct Matrix {
     return index;
   }
 
+  SCENN_CONSTEXPR auto max_value() const {
+    T ret = 0;
+    for (std::size_t i = 0; i < M; ++i)
+      for (std::size_t j = 0; j < N; ++j)
+        if (ret < (*this)(i, j)) ret = (*this)(i, j);
+    return ret;
+  }
+
   SCENN_CONSTEXPR auto get_nth_row(std::size_t index) const {
     Vector<N, T> ret;
     for (std::size_t i = 0; i < N; ++i) ret[i] = (*this)(index, i);
