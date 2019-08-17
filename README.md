@@ -76,7 +76,7 @@ So many limitaions exist...
 
 - Only 1D data can be used.
 - Hittig the constexpr evaluation step limit easily.
-  - We are preparing a patch for newer clang based on https://github.com/ushitora-anqou/constexpr-nn/blob/master/clang.diff.
+  - We are preparing a patch for newer clang based on https://github.com/ushitora-anqou/constexpr-nn/blob/master/clang.diff. clang-patch.diff in this repository works, but we think it includes some unintended changes.
 - Now writing...
 
 ## How it works?
