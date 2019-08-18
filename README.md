@@ -73,6 +73,21 @@ This library is a header-only library.
 
 Include ```<scenn/scenn.hpp>``` and you can use all things provided by scenn except for ```load_mini_mnist_data```.
 
+### Quick Start
+```
+git clone https://github.com/bolero-MURAKAMI/Sprout.git
+git clone https://github.com/Catminusminus/scenn.git
+
+export SPROUT_PATH=./Sprout/
+export SCENN_PATH=./scenn/
+
+clang++ ./scenn/tests/model/xor.cpp -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -std=gnu++2a -fconstexpr-steps=-1
+
+// After a few hours
+
+./a.out // You will see 4.
+```
+
 ## Limitaion
 
 So many limitaions exist...
