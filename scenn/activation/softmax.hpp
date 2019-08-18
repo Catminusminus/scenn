@@ -10,9 +10,8 @@ struct Softmax {
   template <size_t M, size_t N, class T>
   SCENN_CONSTEXPR auto activate(const Matrix<M, N, T>& container) const {
     auto max = container.max_value();
-    auto mat = container.fmap([max](auto&& x) {
-      return sprout::math::exp(x - max);
-    });
+    auto mat =
+        container.fmap([max](auto&& x) { return sprout::math::exp(x - max); });
     auto s = mat.sum();
     return std::move(mat).fmap([s](auto&& x) { return x / s; });
   }
