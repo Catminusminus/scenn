@@ -6,15 +6,19 @@
 
 namespace scenn {
 template <class LossFunction, class... Layers>
-struct SequentialNetwork {
+class SequentialNetwork {
   LossFunction loss;
   using T = sprout::tuple<Layers...>;
   T layers;
+
+ public:
   SCENN_CONSTEXPR SequentialNetwork(LossFunction &&loss, Layers &&... layers)
       : loss(loss), layers(sprout::make_tuple(layers...)){};
   SCENN_CONSTEXPR SequentialNetwork(const LossFunction &loss,
                                     const Layers &... layers)
       : loss(loss), layers(sprout::make_tuple(layers...)){};
+
+ private:
   template <size_t index>
   SCENN_CONSTEXPR auto get_forward_input(const T &some_layers) const {
     if constexpr (index == 0) {
@@ -132,6 +136,7 @@ struct SequentialNetwork {
     }
   }
 
+ public:
   template <std::size_t MiniBatchSize, class Train, class T>
   SCENN_CONSTEXPR auto train(Train &&training_data, std::size_t epochs,
                              T &&learning_rate) {
