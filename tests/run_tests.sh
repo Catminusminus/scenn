@@ -1,5 +1,5 @@
 RunTests () {
-  for file in `\find $1 -maxdepth 1 -type f`; do
+  for file in `\find $1 -mindepth $2 -maxdepth $2 -type f`; do
     echo $file
     clang++ $file -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -std=gnu++2a -fconstexpr-steps=-1
     ./a.out
@@ -17,6 +17,6 @@ then
   exit 1
 fi
 case "$1" in
-  "all" ) echo "all" ;;
-  * ) RunTests $1 ;;
+  "all" ) RunTests "./" 2 ;;
+  * ) RunTests $1 1 ;;
 esac
