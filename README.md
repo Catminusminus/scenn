@@ -37,8 +37,8 @@ int main() {
 
 ```
 
-<strong>WIP</strong>
-The blow code should be worked, but fails due to hitting the constexpr evaluation step limit.
+<strong>MNIST EXAMPLE:</strong>
+To avoid hitting the constexpr evaluation step limit, you need to patch `clang-patch.diff` to clang. In the below code, we use a subset of [MNIST dataset](http://yann.lecun.com/exdb/mnist/), with 100 train size, 10 test size and 3 classes. To generate the sub-dataset, use `tools/generate_mini_mnist.py`.
 ```cpp
 // training and evaluating an model in compile time
 SCENN_CONSTEXPR auto mini_mnist_test() {
@@ -56,22 +56,21 @@ SCENN_CONSTEXPR auto mini_mnist_test() {
 
 int main() {
   SCENN_CONSTEXPR auto evaluation = mini_mnist_test();
-  std::cout << evaluation << std::endl;
+  std::cout << evaluation << std::endl; // we see 8
 }
 ```
 
 ## How to use?
 
-<strong>Now writing...</strong>
 ### Requirements
 
-- [Sprout C++ Library](https://github.com/bolero-MURAKAMI/Sprout)
+- [Sprout C++ Libraries](https://github.com/bolero-MURAKAMI/Sprout)
 
 ### Install
 
 This library is a header-only library.
 
-Include ```<scenn/scenn.hpp>``` and you can use all things provided by scenn except for ```load_mini_mnist_data```.
+Include ```<scenn/scenn.hpp>``` and you can use all things provided by scenn except for ```load_mini_mnist_data```. To use `load_mini_mnist_data` function, you need to prepare the mnist sub-dataset by `tools/generate_mini_mnist.py` and include `<scenn/load.hpp>`.
 
 ### Quick Start
 ```
@@ -81,6 +80,7 @@ git clone https://github.com/Catminusminus/scenn.git
 export SPROUT_PATH=./Sprout/
 export SCENN_PATH=./scenn/
 
+// Run the xor example
 clang++ ./scenn/tests/model/xor.cpp -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -std=gnu++2a -fconstexpr-steps=-1
 
 // After a few hours
@@ -88,18 +88,20 @@ clang++ ./scenn/tests/model/xor.cpp -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -
 ./a.out // You will see 4.
 ```
 
+### API
+<strong>Now writing...</strong>
+
 ## Limitaion
 
 So many limitaions exist...
 
 - Only 1D data can be used.
 - Hittig the constexpr evaluation step limit easily.
-  - We are preparing a patch for newer clang based on https://github.com/ushitora-anqou/constexpr-nn/blob/master/clang.diff. clang-patch.diff in this repository works, but we think it includes some unintended changes.
-- Now writing...
+  - Use the patch `clang-patch.diff` for newer clang based on https://github.com/ushitora-anqou/constexpr-nn/blob/master/clang.diff.
 
 ## How it works?
 
-Thanks to [Sprout C++ Library](https://github.com/bolero-MURAKAMI/Sprout)
+Thanks to [Sprout C++ Libraries](https://github.com/bolero-MURAKAMI/Sprout)
 
 ## Important Disclosure
 
