@@ -3,7 +3,7 @@ index 6943479831e..7e68abd43f8 100644
 --- clang/include/clang/AST/APValue.h
 +++ clang/include/clang/AST/APValue.h
 @@ -102,8 +102,8 @@ public:
- 
+
    public:
      LValueBase() : Local{} {}
 -    LValueBase(const ValueDecl *P, unsigned I = 0, unsigned V = 0);
@@ -11,17 +11,17 @@ index 6943479831e..7e68abd43f8 100644
 +    LValueBase(const ValueDecl *P, size_t I = 0, unsigned V = 0);
 +    LValueBase(const Expr *P, size_t I = 0, unsigned V = 0);
      static LValueBase getTypeInfo(TypeInfoLValue LV, QualType TypeInfo);
- 
+
      template <class T>
 @@ -121,7 +121,7 @@ public:
- 
+
      explicit operator bool() const;
- 
+
 -    unsigned getCallIndex() const;
 +    size_t getCallIndex() const;
      unsigned getVersion() const;
      QualType getTypeInfoType() const;
- 
+
 @@ -134,7 +134,8 @@ public:
    private:
      PtrTy Ptr;
@@ -40,7 +40,7 @@ index 6943479831e..7e68abd43f8 100644
 +  size_t getLValueCallIndex() const;
    unsigned getLValueVersion() const;
    bool isNullPointer() const;
- 
+
 diff --git clang/lib/AST/APValue.cpp clang/lib/AST/APValue.cpp
 index 1993bba9bd1..a8e8acdc82c 100644
 --- clang/lib/AST/APValue.cpp
@@ -48,28 +48,28 @@ index 1993bba9bd1..a8e8acdc82c 100644
 @@ -37,9 +37,9 @@ static_assert(
          alignof(Type),
      "Type is insufficiently aligned");
- 
+
 -APValue::LValueBase::LValueBase(const ValueDecl *P, unsigned I, unsigned V)
 +APValue::LValueBase::LValueBase(const ValueDecl *P, size_t I, unsigned V)
      : Ptr(P), Local{I, V} {}
 -APValue::LValueBase::LValueBase(const Expr *P, unsigned I, unsigned V)
 +APValue::LValueBase::LValueBase(const Expr *P, size_t I, unsigned V)
      : Ptr(P), Local{I, V} {}
- 
+
  APValue::LValueBase APValue::LValueBase::getTypeInfo(TypeInfoLValue LV,
 @@ -50,7 +50,7 @@ APValue::LValueBase APValue::LValueBase::getTypeInfo(TypeInfoLValue LV,
    return Base;
  }
- 
+
 -unsigned APValue::LValueBase::getCallIndex() const {
 +size_t APValue::LValueBase::getCallIndex() const {
    return is<TypeInfoLValue>() ? 0 : Local.CallIndex;
  }
- 
+
 @@ -730,7 +730,7 @@ ArrayRef<APValue::LValuePathEntry> APValue::getLValuePath() const {
    return llvm::makeArrayRef(LVal.getPath(), LVal.PathLength);
  }
- 
+
 -unsigned APValue::getLValueCallIndex() const {
 +size_t APValue::getLValueCallIndex() const {
    assert(isLValue() && "Invalid accessor");
@@ -81,32 +81,32 @@ index b4d02459746..e88118a9176 100644
 +++ clang/lib/AST/ExprConstant.cpp
 @@ -511,7 +511,7 @@ namespace {
      SourceLocation CallLoc;
- 
+
      /// Index - The call index of this call.
 -    unsigned Index;
-+    size_t Index
- 
++    size_t Index;
+
      /// The stack of integers for tracking version numbers for temporaries.
      SmallVector<unsigned, 2> TempVersionStack = {1};
 @@ -720,12 +720,12 @@ namespace {
      unsigned CallStackDepth;
- 
+
      /// NextCallIndex - The next call index to assign.
 -    unsigned NextCallIndex;
 +    size_t NextCallIndex;
- 
+
      /// StepsLeft - The remaining number of evaluation steps we're permitted
      /// to perform. This is essentially a limit for the number of statements
      /// we will evaluate.
 -    unsigned StepsLeft;
 +    int StepsLeft;
- 
+
      /// BottomFrame - The frame in which evaluation started. This must be
      /// initialized after CurrentCall and CallStackDepth.
 @@ -881,12 +881,12 @@ namespace {
        return false;
      }
- 
+
 -    std::pair<CallStackFrame *, unsigned>
 -    getCallFrameAndDepth(unsigned CallIndex) {
 +    std::pair<CallStackFrame *, size_t>
@@ -128,104 +128,13 @@ index b4d02459746..e88118a9176 100644
 +        --StepsLeft;
        return true;
      }
- 
+
 @@ -1452,7 +1453,7 @@ namespace {
      const SubobjectDesignator &getLValueDesignator() const { return Designator;}
      bool isNullPointer() const { return IsNullPtr;}
- 
+
 -    unsigned getLValueCallIndex() const { return Base.getCallIndex(); }
 +    size_t getLValueCallIndex() const { return Base.getCallIndex(); }
      unsigned getLValueVersion() const { return Base.getVersion(); }
- 
+
      void moveInto(APValue &V) const {
-diff --git llvm/lib/Support/MemoryBuffer.cpp llvm/lib/Support/MemoryBuffer.cpp
-index d0e5bb154c1..2f31f059ddb 100644
---- llvm/lib/Support/MemoryBuffer.cpp
-+++ llvm/lib/Support/MemoryBuffer.cpp
-@@ -458,7 +458,9 @@ getOpenFileImpl(sys::fs::file_t FD, const Twine &Filename, uint64_t FileSize,
-     return make_error_code(errc::not_enough_memory);
-   }
- 
--  sys::fs::readNativeFileSlice(FD, Buf->getBuffer(), Offset);
-+  if (std::error_code EC =
-+          sys::fs::readNativeFileSlice(FD, Buf->getBuffer(), Offset))
-+    return EC;
- 
-   return std::move(Buf);
- }
-diff --git llvm/unittests/Support/MemoryBufferTest.cpp llvm/unittests/Support/MemoryBufferTest.cpp
-index 2f9664308dc..629b94d7843 100644
---- llvm/unittests/Support/MemoryBufferTest.cpp
-+++ llvm/unittests/Support/MemoryBufferTest.cpp
-@@ -11,6 +11,7 @@
- //===----------------------------------------------------------------------===//
- 
- #include "llvm/Support/MemoryBuffer.h"
-+#include "llvm/ADT/ScopeExit.h"
- #include "llvm/Support/FileSystem.h"
- #include "llvm/Support/FileUtilities.h"
- #include "llvm/Support/raw_ostream.h"
-@@ -19,6 +20,25 @@
- 
- using namespace llvm;
- 
-+#define ASSERT_NO_ERROR(x)                                                     \
-+  if (std::error_code ASSERT_NO_ERROR_ec = x) {                                \
-+    SmallString<128> MessageStorage;                                           \
-+    raw_svector_ostream Message(MessageStorage);                               \
-+    Message << #x ": did not return errc::success.\n"                          \
-+            << "error number: " << ASSERT_NO_ERROR_ec.value() << "\n"          \
-+            << "error message: " << ASSERT_NO_ERROR_ec.message() << "\n";      \
-+    GTEST_FATAL_FAILURE_(MessageStorage.c_str());                              \
-+  } else {                                                                     \
-+  }
-+
-+#define ASSERT_ERROR(x)                                                        \
-+  if (!x) {                                                                    \
-+    SmallString<128> MessageStorage;                                           \
-+    raw_svector_ostream Message(MessageStorage);                               \
-+    Message << #x ": did not return a failure error code.\n";                  \
-+    GTEST_FATAL_FAILURE_(MessageStorage.c_str());                              \
-+  }
-+
- namespace {
- 
- class MemoryBufferTest : public testing::Test {
-@@ -65,6 +85,37 @@ TEST_F(MemoryBufferTest, get) {
-   EXPECT_EQ("this is some data", data);
- }
- 
-+TEST_F(MemoryBufferTest, getOpenFile) {
-+  int FD;
-+  SmallString<64> TestPath;
-+  ASSERT_EQ(sys::fs::createTemporaryFile("MemoryBufferTest_getOpenFile", "temp",
-+                                         FD, TestPath),
-+            std::error_code());
-+
-+  FileRemover Cleanup(TestPath);
-+  raw_fd_ostream OF(FD, /*shouldClose*/ true);
-+  OF << "12345678";
-+  OF.close();
-+
-+  {
-+    Expected<sys::fs::file_t> File = sys::fs::openNativeFileForRead(TestPath);
-+    ASSERT_THAT_EXPECTED(File, Succeeded());
-+    auto OnExit =
-+        make_scope_exit([&] { ASSERT_NO_ERROR(sys::fs::closeFile(*File)); });
-+    ErrorOr<OwningBuffer> MB = MemoryBuffer::getOpenFile(*File, TestPath, 6);
-+    ASSERT_NO_ERROR(MB.getError());
-+    EXPECT_EQ("123456", MB.get()->getBuffer());
-+  }
-+  {
-+    Expected<sys::fs::file_t> File = sys::fs::openNativeFileForWrite(
-+        TestPath, sys::fs::CD_OpenExisting, sys::fs::OF_None);
-+    ASSERT_THAT_EXPECTED(File, Succeeded());
-+    auto OnExit =
-+        make_scope_exit([&] { ASSERT_NO_ERROR(sys::fs::closeFile(*File)); });
-+    ASSERT_ERROR(MemoryBuffer::getOpenFile(*File, TestPath, 6).getError());
-+  }
-+}
-+
- TEST_F(MemoryBufferTest, NullTerminator4K) {
-   // Test that a file with size that is a multiple of the page size can be null
-   // terminated correctly by MemoryBuffer.
