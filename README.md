@@ -89,7 +89,28 @@ clang++ ./scenn/tests/model/xor.cpp -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -
 ```
 
 ### API
-<strong>Now writing...</strong>
+
+For more details, see [documentation](
+https://catminusminus.github.io/scenn-doc/) .
+#### Model
+- `scenn::SequentialNetwork`
+    - `SequentialNetwork(loss_function, layers...)`
+    - `train<MiniBatchSize>(training_data, epochs, learning_rate)`
+    - `single_forwatd(test_data)`
+    - `evaluate(test_data)`
+
+#### Layers
+- `DenseLayer<input_dim, output_dim, num_type>(seed)`
+- `ActivationLayer<dim, num_type>(activation_function)`
+
+#### Activation
+- `Sigmoid()`
+- `Softmax()`
+
+#### Loss Function
+- `MSE()`
+- `BinaryCrossEntropy()`
+- `CrossEntropy()`
 
 ## Limitaion
 
