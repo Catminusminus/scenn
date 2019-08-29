@@ -88,7 +88,7 @@ clang++ ./scenn/tests/model/xor.cpp -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -
 ./a.out // You will see 4.
 ```
 
-### API
+### Features
 
 For more details, see [documentation](
 https://catminusminus.github.io/scenn-doc/) .
