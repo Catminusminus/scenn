@@ -19,22 +19,35 @@ SCENN_CONSTEXPR auto test() {
   double X_arr[4][2] = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
   double Y_arr[4][2] = {{1, 0}, {0, 1}, {0, 1}, {1, 0}};
   auto dataset = Dataset(make_matrix_from_array(std::move(X_arr)),
-              make_matrix_from_array(std::move(Y_arr)));
+                         make_matrix_from_array(std::move(Y_arr)));
   auto trained_model =
       SequentialNetwork(BinaryCrossEntropy(), DenseLayer<2, 4, double>(),
                         ActivationLayer<4, double>(Sigmoid()),
                         DenseLayer<4, 2, double>(10),
                         ActivationLayer<2, double>(Sigmoid()))
-          .train<2>(dataset,
-                    2000, 0.1);
+          .train<2>(dataset, 2000, 0.1);
   return trained_model.evaluate(std::move(dataset));
 }
 
 int main() {
   SCENN_CONSTEXPR auto evaluation = test();
-  std::cout << evaluation; // 4
+  std::cout << evaluation << std::endl; // 4
 }
 
+```
+like the python code with Keras
+```python
+X_train = numpy.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+Y_train = numpy.array([[1, 0], [0, 1], [1, 0], [1, 0]])
+model = Sequential([
+  Dense(4, input_dim=2),
+  Activation('sigmoid'),
+  Dense(2, input_dim=4),
+  Activation('sigmoid')
+])
+model.compile(loss='binary_crossentropy', optimizer=SGD(0.1))
+model.fit(X_train, Y_train, batch_size=2, epochs=2000)
+# Omit the evaluation
 ```
 
 <strong>MNIST EXAMPLE:</strong>
@@ -119,6 +132,7 @@ So many limitaions exist...
 - Only 1D data can be used.
 - Hittig the constexpr evaluation step limit easily.
   - Use the patch `clang-patch.diff` for newer clang based on https://github.com/ushitora-anqou/constexpr-nn/blob/master/clang.diff.
+- You can run training and evaluating only in compile time, because runtime training and evaluating hit the stack size limit. We are planning to use the heap memory allocation in runtime (we will use std::vector in both cases in C++20).
 
 ## How it works?
 
