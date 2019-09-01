@@ -100,17 +100,17 @@ https://catminusminus.github.io/scenn-doc/) .
     - `evaluate(test_data)`
 
 #### Layers
-- `DenseLayer<input_dim, output_dim, num_type>(seed)`
-- `ActivationLayer<dim, num_type>(activation_function)`
+- `scenn::DenseLayer<input_dim, output_dim, num_type>(seed)`
+- `scenn::ActivationLayer<dim, num_type>(activation_function)`
 
 #### Activation
-- `Sigmoid()`
-- `Softmax()`
+- `scenn::Sigmoid()`
+- `scenn::Softmax()`
 
 #### Loss Function
-- `MSE()`
-- `BinaryCrossEntropy()`
-- `CrossEntropy()`
+- `scenn::MSE()`
+- `scenn::BinaryCrossEntropy()`
+- `scenn::CrossEntropy()`
 
 ## Limitaion
 
