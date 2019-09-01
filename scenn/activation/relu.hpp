@@ -17,7 +17,7 @@ SCENN_CONSTEXPR auto relu_prime(T x) {
   return static_cast<T>(0);
 }
 
-struct Relu {
+struct ReLU {
   template <size_t M, size_t N, class T>
   SCENN_CONSTEXPR auto activate(const Matrix<M, N, T>& container) const {
     return container.fmap([](auto&& x) { return relu<T>(x); });
@@ -28,7 +28,7 @@ struct Relu {
   }
   template <class T, class U>
   SCENN_CONSTEXPR auto calc_backward_pass(T&& data, U&& delta) const {
-    return activate_prime(std::forward<U>(data)) * (std::forward<T>(delta));
+    return activate_prime(std::forward<T>(data)) * (std::forward<U>(delta));
   }
 };
 }  // namespace scenn

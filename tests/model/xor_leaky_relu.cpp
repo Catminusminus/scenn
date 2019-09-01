@@ -13,7 +13,7 @@ SCENN_CONSTEXPR auto test() {
                          make_matrix_from_array(std::move(Y_arr)));
   auto trained_model =
       SequentialNetwork(BinaryCrossEntropy(), DenseLayer<2, 4, double>(),
-                        ActivationLayer<4, double>(ReLU()),
+                        ActivationLayer<4, double>(LeakyReLU(0.3)),
                         DenseLayer<4, 2, double>(10),
                         ActivationLayer<2, double>(Sigmoid()))
           .train<2>(dataset, 2000, 0.1);
