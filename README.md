@@ -38,7 +38,7 @@ int main() {
 like the Python code with [Keras](https://github.com/keras-team/keras)
 ```python
 X_train = numpy.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-Y_train = numpy.array([[1, 0], [0, 1], [1, 0], [1, 0]])
+Y_train = numpy.array([[1, 0], [0, 1], [0, 1], [1, 0]])
 model = Sequential([
   Dense(4, input_dim=2),
   Activation('sigmoid'),

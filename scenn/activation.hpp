@@ -3,5 +3,6 @@
 
 #include <scenn/activation/sigmoid.hpp>
 #include <scenn/activation/softmax.hpp>
+#include <scenn/activation/relu.hpp>
 
 #endif
