@@ -119,6 +119,8 @@ https://catminusminus.github.io/scenn-doc/) .
 #### Activation
 - `scenn::Sigmoid()`
 - `scenn::Softmax()`
+- `scenn::ReLU()`
+- `scenn::LeakyReLU(alpha)`
 
 #### Loss Function
 - `scenn::MSE()`
