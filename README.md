@@ -131,7 +131,7 @@ https://catminusminus.github.io/scenn-doc/) .
 
 So many limitaions exist...
 
-- Only 1D data can be used.
+- Only "1D data" (more precisely, not 1D vectors but rank-1 tensors) can be used.
 - Hittig the constexpr evaluation step limit easily.
   - Use the patch `clang-patch.diff` for newer clang based on https://github.com/ushitora-anqou/constexpr-nn/blob/master/clang.diff.
 - You can run training and evaluating only in compile time, because runtime training and evaluating hit the stack size limit. We are planning to use the heap memory allocation in runtime (we will use std::vector in both cases in C++20).
