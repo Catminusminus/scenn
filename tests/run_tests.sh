@@ -1,3 +1,5 @@
+#!/bin/bash
+
 RunTests () {
   for file in `\find $1 -mindepth $2 -maxdepth $2 -type f`; do
     echo $file
