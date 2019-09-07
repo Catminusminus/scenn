@@ -7,15 +7,15 @@
 namespace scenn {
 template <class T>
 SCENN_CONSTEXPR auto hard_sigmoid(T x) {
-  if (x < static_static<T>(-2.5)) return static_cast<T>(0);
-  if (x < static_static<T>(2.5)) return 0.2 * x + 0.5;
+  if (x < static_cast<T>(-2.5)) return static_cast<T>(0);
+  if (x < static_cast<T>(2.5)) return static_cast<T>(0.2 * x + 0.5);
   return static_cast<T>(1);
 }
 
 template <class T>
 SCENN_CONSTEXPR auto hard_sigmoid_prime(T x) {
-  if (x < static_static<T>(-2.5)) return static_cast<T>(0);
-  if (x < static_static<T>(2.5)) return 0.2;
+  if (x < static_cast<T>(-2.5)) return static_cast<T>(0);
+  if (x < static_cast<T>(2.5)) return static_cast<T>(0.2);
   return static_cast<T>(0);
 }
 

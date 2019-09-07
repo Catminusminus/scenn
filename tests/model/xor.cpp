@@ -16,11 +16,10 @@ SCENN_CONSTEXPR auto test() {
                         ActivationLayer<4, double>(Sigmoid()),
                         DenseLayer<4, 2, double>(10),
                         ActivationLayer<2, double>(Sigmoid()))
-          .train<2>(dataset, 2000, 0.1);
+          .train<2>(dataset, 2, 0.1);
   return trained_model.evaluate(std::move(dataset));
 }
 
 int main() {
-  SCENN_CONSTEXPR auto evaluation = test();
-  std::cout << evaluation << std::endl;
+  [[maybe_unused]] SCENN_CONSTEXPR auto evaluation = test();
 }

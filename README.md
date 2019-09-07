@@ -118,9 +118,13 @@ https://catminusminus.github.io/scenn-doc/) .
 
 #### Activation
 - `scenn::Sigmoid()`
+- `scenn::HardSigmoid()`
 - `scenn::Softmax()`
 - `scenn::ReLU()`
+- `scenn::ELU(alpha)`
+- `scenn::SeLU<num_type>()`
 - `scenn::LeakyReLU(alpha)`
+- `scenn::ThresholdedReLU(theta)`
 
 #### Loss Function
 - `scenn::MSE()`
