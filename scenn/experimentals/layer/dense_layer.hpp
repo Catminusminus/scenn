@@ -5,7 +5,7 @@
 #include <utility>
 
 namespace scenn {
-namespace experimental {
+namespace experimentals {
 template <std::size_t InputDim, std::size_t OutputDim, class NumType>
 struct DenseLayer {
   decltype(make_zeros_from_pair<InputDim, 1, NumType>()) input_data;
@@ -14,9 +14,9 @@ struct DenseLayer {
   decltype(make_zeros_from_pair<InputDim, 1, NumType>()) output_delta;
   decltype(make_random_matrix<OutputDim, InputDim, NumType>()) weight;
   decltype(make_random_matrix<OutputDim, 1, NumType>()) bias;
-  decltype(make_zeros_from_pair<OutputDim, InputDim, NumType>()) delta_W;
+  decltype(make_zeros_from_pair<OutputDim, InputDim, NumType>()) delta_w;
   decltype(make_zeros_from_pair<OutputDim, 1, NumType>()) delta_b;
-  SCENN_CONSTEXPR DenseLayer(std::size_t seed)
+  SCENN_CONSTEXPR DenseLayer(std::size_t seed = 0)
       : input_data(make_zeros_from_pair<InputDim, 1, NumType>()),
         output_data(make_zeros_from_pair<OutputDim, 1, NumType>()),
         input_delta(make_zeros_from_pair<InputDim, 1, NumType>()),
@@ -32,20 +32,20 @@ struct DenseLayer {
   template <class T, class U>
   SCENN_CONSTEXPR auto backward(T&& data, U&& delta) {
     output_delta = weight.transposed().dot(delta);
-    delta_w += delta.dot(std::forward<T>(data).transposed());
-    delta_b += std::forward<U>(delta);
+    delta_w = delta_w + delta.dot(std::forward<T>(data).transposed());
+    delta_b = delta_b + std::forward<U>(delta);
   }
   template <class T>
   SCENN_CONSTEXPR auto update_params(T&& rate) {
-    weight -= delta_w * rate;
-    bias -= delta_b * std::forward<T>(rate);
+    weight = weight - delta_w * rate;
+    bias = bias - delta_b * std::forward<T>(rate);
   }
   SCENN_CONSTEXPR auto clear_deltas() {
     delta_w = make_zeros_from_pair<OutputDim, InputDim, NumType>();
     delta_b = make_zeros_from_pair<OutputDim, 1, NumType>();
   }
 };
-}  // namespace experimental
+}  // namespace experimentals
 }  // namespace scenn
 
 #endif

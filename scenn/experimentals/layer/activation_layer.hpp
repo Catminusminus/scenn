@@ -1,21 +1,21 @@
-#ifndef SCENN_LAYER_ACTIVATION_LAYER_HPP
-#define SCENN_LAYER_ACTIVATION_LAYER_HPP
+#ifndef SCENN_EXPERIMENTALS_LAYER_ACTIVATION_LAYER_HPP
+#define SCENN_EXPERIMENTALS_LAYER_ACTIVATION_LAYER_HPP
 
 #include <scenn/matrix.hpp>
 #include <scenn/util.hpp>
 #include <utility>
 
-namespace scenn {
-namespace experimental {
+namespace scenn::experimentals {
+namespace detail {
 // Activation must has an activation method and an activation_prime method
-template <class Dim, class NumType, class Activation>
-struct ActivationLayer {
+template <std::size_t Dim, class NumType, class Activation>
+struct ActivationLayerImpl {
   Activation activation;
   decltype(make_zeros_from_pair<Dim, 1, NumType>()) input_data;
   decltype(make_zeros_from_pair<Dim, 1, NumType>()) output_data;
   decltype(make_zeros_from_pair<Dim, 1, NumType>()) input_delta;
   decltype(make_zeros_from_pair<Dim, 1, NumType>()) output_delta;
-  SCENN_CONSTEXPR ActivationLayer(Activation&& activation)
+  SCENN_CONSTEXPR ActivationLayerImpl(Activation&& activation)
       : activation(std::forward<Activation>(activation)),
         input_data(make_zeros_from_pair<Dim, 1, NumType>()),
         output_data(make_zeros_from_pair<Dim, 1, NumType>()),
@@ -30,17 +30,15 @@ struct ActivationLayer {
     output_delta = activation.calc_backward_pass(std::forward<U>(data),
                                                  std::forward<T>(delta));
   }
-  SCENN_CONSTEXPR auto clear_deltas() const& { return (*this); }
-  SCENN_CONSTEXPR auto clear_deltas() && { return std::move(*this); }
+  SCENN_CONSTEXPR auto clear_deltas() {}
   template <class T>
-  SCENN_CONSTEXPR auto update_params([[maybe_unused]] T rate) const& {
-    return (*this);
-  }
-  template <class T>
-  SCENN_CONSTEXPR auto update_params([[maybe_unused]] T rate) && {
-    return std::move(*this);
-  }
+  SCENN_CONSTEXPR auto update_params([[maybe_unused]] T rate) {}
 };
-}  // namespace experimental
-}  // namespace scenn
+}  // namespace detail
+template <std::size_t Dim, class NumType, class Activation>
+SCENN_CONSTEXPR auto ActivationLayer(Activation&& activation) {
+  return detail::ActivationLayerImpl<Dim, NumType, Activation>(
+      std::forward<Activation>(activation));
+}
+}  // namespace scenn::experimentals
 #endif
