@@ -108,22 +108,24 @@ struct ActivationLayerImpl {
   }
 };
 }  // namespace detail
-template <std::size_t Dim, class NumType, class Loss>
-SCENN_CONSTEXPR auto ActivationLayer(Loss&& loss) {
+template <std::size_t Dim, class NumType, class Activation>
+SCENN_CONSTEXPR auto ActivationLayer(Activation&& activation) {
   return detail::ActivationLayerImpl<
-      Loss, decltype(make_zeros_from_pair<Dim, 1, NumType>()),
+      Activation, decltype(make_zeros_from_pair<Dim, 1, NumType>()),
       decltype(make_zeros_from_pair<Dim, 1, NumType>()),
       decltype(make_zeros_from_pair<Dim, 1, NumType>()),
       decltype(make_zeros_from_pair<Dim, 1, NumType>())>(
-      std::forward<Loss>(loss), make_zeros_from_pair<Dim, 1, NumType>(),
+      std::forward<Activation>(activation),
+      make_zeros_from_pair<Dim, 1, NumType>(),
       make_zeros_from_pair<Dim, 1, NumType>(),
       make_zeros_from_pair<Dim, 1, NumType>(),
       make_zeros_from_pair<Dim, 1, NumType>());
 }
 
-template <std::size_t Dim, class NumType, class Loss>
-SCENN_CONSTEXPR auto ActivationLayerCreator(Loss&& loss) {
-  return ActivationLayer<Dim, NumType, Loss>(std::forward<Loss>(loss));
+template <std::size_t Dim, class NumType, class Activation>
+SCENN_CONSTEXPR auto ActivationLayerCreator(Activation&& activation) {
+  return ActivationLayer<Dim, NumType, Activation>(
+      std::forward<Activation>(activation));
 }
 
 }  // namespace scenn
