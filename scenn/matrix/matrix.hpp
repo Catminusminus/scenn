@@ -168,6 +168,14 @@ struct Matrix {
     return ret;
   }
 
+  template <class Function>
+  SCENN_CONSTEXPR auto fmap_with_index(Function&& f) const {
+    static_assert(M == 1);
+    Vector<N, T> ret;
+    for (size_t i = 0; i < N; ++i) ret(i) = f((*this)(i), i);
+    return ret;
+  }
+
   SCENN_CONSTEXPR auto sum() const {
     T ret = 0;
     for (std::size_t i = 0; i < M; ++i)
