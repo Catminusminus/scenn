@@ -19,7 +19,7 @@ struct MSLE {
                                               const U& labels) {
     return ((predictions + 1).fmap(sprout::math::log<predictions::value_type>) -
             (labels + 1).fmap(sprout::math::log<labels::value_type>)) /
-           predictions;
+           (predictions + 1);
   }
 };
 }  // namespace scenn
