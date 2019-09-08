@@ -102,7 +102,7 @@ struct DenseLayerImpl {
   SCENN_CONSTEXPR auto backward(T&& data, U&& delta) && {
     auto new_output_delta = weight.transposed().dot(delta);
     auto new_delta_w =
-        std::move(delta_w) + delta.dot(std::move(data).transposed());
+        std::move(delta_w) + delta.dot(std::forward<T>(data).transposed());
     auto new_delta_b = std::move(delta_b) + std::forward<U>(delta);
     return DenseLayerImpl<A, B, C, decltype(new_output_delta), E, F,
                           decltype(new_delta_w), decltype(new_delta_b),
