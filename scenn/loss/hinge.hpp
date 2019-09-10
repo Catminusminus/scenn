@@ -8,16 +8,16 @@ struct Hinge {
   template <class T, class U>
   static SCENN_CONSTEXPR auto loss_function(const T& predictions,
                                             const U& labels) {
-    return (1 - (predictions * labels))
+    return ((predictions * labels) * (-1) + 1)
         .fmap([](auto&& x) { return x > 0 ? x : 0; })
         .sum();
   }
   template <class T, class U>
   static SCENN_CONSTEXPR auto loss_derivative(const T& predictions,
                                               const U& labels) {
-    return (1 - (predictions * labels)).fmap_with_index([](auto&& x, auto&& i) {
-      return x > 0 ? -labels[i] : 0;
-    });
+    return ((predictions * labels) * (-1) + 1)
+        .fmap_with_index(
+            [&labels](auto&& x, auto&& i) { return x > 0 ? -labels[i] : 0; });
   }
 };
 }  // namespace scenn

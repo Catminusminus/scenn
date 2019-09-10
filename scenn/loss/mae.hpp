@@ -10,7 +10,11 @@ struct MAE {
   static SCENN_CONSTEXPR auto loss_function(const T& predictions,
                                             const U& labels) {
     auto diff = predictions - labels;
-    return std::move(diff).fmap(sprout::math::abs).sum();
+    return std::move(diff)
+        .fmap([](auto&& x) {
+          return sprout::math::abs(std::forward<decltype(x)>(x));
+        })
+        .sum();
   }
   template <class T, class U>
   static SCENN_CONSTEXPR auto loss_derivative(const T& predictions,
