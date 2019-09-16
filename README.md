@@ -128,8 +128,10 @@ https://catminusminus.github.io/scenn-doc/) .
 
 #### Loss Function
 - `scenn::MSE()`
+- `scenn::MSLE()`
 - `scenn::BinaryCrossEntropy()`
 - `scenn::CrossEntropy()`
+- `scenn::Hinge()`
 
 ## Limitaion
 
