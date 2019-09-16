@@ -1,10 +1,10 @@
-#ifndef SCENN_EXPERIMENTALS_MODEL_SEQUENTIAL_NETWORK_HPP
-#define SCENN_EXPERIMENTALS_MODEL_SEQUENTIAL_NETWORK_HPP
+#ifndef SCENN_EXPERIMENTAL_MODEL_SEQUENTIAL_NETWORK_HPP
+#define SCENN_EXPERIMENTAL_MODEL_SEQUENTIAL_NETWORK_HPP
 
 #include <scenn/util.hpp>
 #include <sprout/tuple.hpp>
 
-namespace scenn::experimentals {
+namespace scenn::experimental {
 template <class LossFunction, class... Layers>
 class SequentialNetwork {
   LossFunction loss;
@@ -146,5 +146,5 @@ class SequentialNetwork {
     return sum;
   }
 };
-}  // namespace scenn::experimentals
+}  // namespace scenn::experimental
 #endif

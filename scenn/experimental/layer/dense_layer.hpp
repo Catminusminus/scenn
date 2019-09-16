@@ -1,11 +1,10 @@
-#ifndef SCENN_EXPERIMENTALS_LAYER_DENSE_LAYER_HPP
-#define SCENN_EXPERIMENTALS_LAYER_DENSE_LAYER_HPP
+#ifndef SCENN_EXPERIMENTAL_LAYER_DENSE_LAYER_HPP
+#define SCENN_EXPERIMENTAL_LAYER_DENSE_LAYER_HPP
 #include <scenn/matrix.hpp>
 #include <scenn/util.hpp>
 #include <utility>
 
-namespace scenn {
-namespace experimentals {
+namespace scenn::experimental {
 template <std::size_t InputDim, std::size_t OutputDim, class NumType>
 struct DenseLayer {
   decltype(make_zeros_from_pair<InputDim, 1, NumType>()) input_data;
@@ -45,7 +44,6 @@ struct DenseLayer {
     delta_b = make_zeros_from_pair<OutputDim, 1, NumType>();
   }
 };
-}  // namespace experimentals
-}  // namespace scenn
+}  // namespace scenn::experimental
 
 #endif

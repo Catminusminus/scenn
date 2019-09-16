@@ -1,11 +1,11 @@
-#ifndef SCENN_EXPERIMENTALS_LAYER_ACTIVATION_LAYER_HPP
-#define SCENN_EXPERIMENTALS_LAYER_ACTIVATION_LAYER_HPP
+#ifndef SCENN_EXPERIMENTAL_LAYER_ACTIVATION_LAYER_HPP
+#define SCENN_EXPERIMENTAL_LAYER_ACTIVATION_LAYER_HPP
 
 #include <scenn/matrix.hpp>
 #include <scenn/util.hpp>
 #include <utility>
 
-namespace scenn::experimentals {
+namespace scenn::experimental {
 namespace detail {
 // Activation must has an activation method and an activation_prime method
 template <std::size_t Dim, class NumType, class Activation>
@@ -40,5 +40,5 @@ SCENN_CONSTEXPR auto ActivationLayer(Activation&& activation) {
   return detail::ActivationLayerImpl<Dim, NumType, Activation>(
       std::forward<Activation>(activation));
 }
-}  // namespace scenn::experimentals
+}  // namespace scenn::experimental
 #endif

@@ -1,14 +1,14 @@
 #include <iostream>
 #include <scenn/activation.hpp>
 #include <scenn/dataset.hpp>
-#include <scenn/experimentals/layer/activation_layer.hpp>
-#include <scenn/experimentals/layer/dense_layer.hpp>
-#include <scenn/experimentals/model/sequential_network.hpp>
+#include <scenn/experimental/layer/activation_layer.hpp>
+#include <scenn/experimental/layer/dense_layer.hpp>
+#include <scenn/experimental/model/sequential_network.hpp>
 #include <scenn/loss.hpp>
 
 SCENN_CONSTEXPR auto test() {
   using namespace scenn;
-  using namespace scenn::experimentals;
+  using namespace scenn::experimental;
   double X_arr[4][2] = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
   double Y_arr[4][2] = {{1, 0}, {0, 1}, {0, 1}, {1, 0}};
   auto dataset = Dataset(make_matrix_from_array(std::move(X_arr)),
