@@ -94,7 +94,7 @@ export SPROUT_PATH=./Sprout/
 export SCENN_PATH=./scenn/
 
 // Run the xor example
-clang++ ./scenn/tests/model/xor.cpp -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -std=gnu++2a -fconstexpr-steps=-1
+clang++ ./scenn/examples/xor.cpp -Wall -Wextra -I$SPROUT_PATH -I$SCENN_PATH -std=gnu++2a -fconstexpr-steps=-1
 
 // After a few hours
 
