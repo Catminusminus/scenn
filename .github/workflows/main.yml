@@ -9,7 +9,5 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Install clang
-      run: apt install clang
     - name: Run tests
       run: cd tests && ./run_tests all
