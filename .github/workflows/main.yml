@@ -12,6 +12,6 @@ jobs:
     - name: Install Sprout
       run: git clone https://github.com/bolero-MURAKAMI/Sprout.git
     - name: Export ENVs
-      run: export SPROUT_PATH=./Sprout/ && export SCENN_PATH=./scenn/ && ls
+      run: export SPROUT_PATH=./Sprout/ && export SCENN_PATH=./
     - name: Run tests
       run: cd tests && ./run_tests.sh all
