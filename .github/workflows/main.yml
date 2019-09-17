@@ -15,4 +15,4 @@ jobs:
       env:
         SPROUT_PATH: ./Sprout/
         SCENN_PATH: ./
-      run: cd tests && ./run_tests.sh all
+      run: echo $SPROUT_PATH && cd tests && ./run_tests.sh all
