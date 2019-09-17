@@ -10,4 +10,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run tests
-      run: cd tests && ./run_tests all
+      run: cd tests && ./run_tests.sh all
