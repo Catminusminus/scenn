@@ -11,9 +11,8 @@ jobs:
     - uses: actions/checkout@v1
     - name: Install Sprout
       run: git clone https://github.com/bolero-MURAKAMI/Sprout.git
-    - name: Export ENVs
-      run: export SPROUT_PATH=./Sprout/ && export SCENN_PATH=./
-    - name: echo
-      run: echo $SCENN_PATH
     - name: Run tests
+      env:
+        SPROUT_PATH: ./Sprout/
+        SCENN_PATH: ./
       run: cd tests && ./run_tests.sh all
