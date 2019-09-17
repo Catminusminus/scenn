@@ -13,6 +13,6 @@ jobs:
       run: git clone https://github.com/bolero-MURAKAMI/Sprout.git
     - name: Run tests
       env:
-        SPROUT_PATH: ./Sprout/
-        SCENN_PATH: ./
+        SPROUT_PATH: $PWD/Sprout/
+        SCENN_PATH: $PWD/
       run: echo $SCENN_PATH && ls && cd tests && ./run_tests.sh all
