@@ -1,5 +1,8 @@
 # Sequential ConstExpr Neural Network
 
+![GitHub](https://img.shields.io/github/license/Catminusminus/scenn?style=for-the-badge)
+![GitHub top language](https://img.shields.io/github/languages/top/Catminusminus/scenn?style=for-the-badge)
+
 Proof of concept of sequential models of neural networks in compile time.
 
 <strong>Alpha Stage</strong>
