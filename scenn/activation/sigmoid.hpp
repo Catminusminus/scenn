@@ -4,10 +4,13 @@
 #include <scenn/matrix/matrix.hpp>
 #include <scenn/util.hpp>
 #include <sprout/math.hpp>
+#include <type_traits>
 
 namespace scenn {
 template <class T>
 SCENN_CONSTEXPR auto sigmoid(T x) {
+  assert_floating_point<T>();
+
   // ref http://www.kamishima.net/mlmpyja/lr/sigmoid.html
   T sigmoid_range = 34.538776394910684;
 
@@ -18,15 +21,16 @@ SCENN_CONSTEXPR auto sigmoid(T x) {
 
 template <class T>
 SCENN_CONSTEXPR auto sigmoid_prime(T x) {
+  assert_floating_point<T>();
   return sigmoid(x) * (1 - sigmoid(x));
 }
 
 struct Sigmoid {
-  template <size_t M, size_t N, class T>
+  template <std::size_t M, std::size_t N, class T>
   SCENN_CONSTEXPR auto activate(const Matrix<M, N, T>& container) const {
     return container.fmap([](auto&& x) { return sigmoid<T>(x); });
   }
-  template <size_t M, size_t N, class T>
+  template <std::size_t M, std::size_t N, class T>
   SCENN_CONSTEXPR auto activate_prime(const Matrix<M, N, T>& container) const {
     return container.fmap([](auto&& x) { return sigmoid_prime<T>(x); });
   }
