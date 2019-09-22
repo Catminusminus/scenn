@@ -54,7 +54,12 @@ model.fit(X_train, Y_train, batch_size=2, epochs=2000)
 ```
 
 <strong>MNIST EXAMPLE:</strong>
-To avoid hitting the constexpr evaluation step limit, you need to patch `clang-patch.diff` to clang. In the below code, we use a subset of [MNIST dataset](http://yann.lecun.com/exdb/mnist/), with 100 train size, 10 test size and 3 classes. To generate the sub-dataset, use `tools/generate_mini_mnist.py`.
+To avoid hitting the constexpr evaluation step limit, you need to patch `clang-patch.diff` to clang. In the below code, we use a subset of [MNIST dataset](http://yann.lecun.com/exdb/mnist/), with 100 train size, 10 test size and 3 classes. To generate the sub-dataset, run
+```
+// See https://github.com/maxpumperla/deep_learning_and_the_game_of_go/blob/master/code/dlgo/nn/load_mnist.py
+wget https://s3.amazonaws.com/img-datasets/mnist.npz -O mnist.npz
+```
+in the tools directory, then use `tools/generate_mini_mnist.py`.
 ```cpp
 // training and evaluating an model in compile time
 SCENN_CONSTEXPR auto mini_mnist_test() {
