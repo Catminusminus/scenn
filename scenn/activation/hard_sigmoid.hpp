@@ -7,6 +7,7 @@
 namespace scenn {
 template <class T>
 SCENN_CONSTEXPR auto hard_sigmoid(T x) {
+  assert_arithmetic<T>();
   if (x < static_cast<T>(-2.5)) return static_cast<T>(0);
   if (x < static_cast<T>(2.5)) return static_cast<T>(0.2 * x + 0.5);
   return static_cast<T>(1);
@@ -14,17 +15,18 @@ SCENN_CONSTEXPR auto hard_sigmoid(T x) {
 
 template <class T>
 SCENN_CONSTEXPR auto hard_sigmoid_prime(T x) {
+  assert_arithmetic<T>();
   if (x < static_cast<T>(-2.5)) return static_cast<T>(0);
   if (x < static_cast<T>(2.5)) return static_cast<T>(0.2);
   return static_cast<T>(0);
 }
 
 struct HardSigmoid {
-  template <size_t M, size_t N, class T>
+  template <std::size_t M, std::size_t N, class T>
   SCENN_CONSTEXPR auto activate(const Matrix<M, N, T>& container) const {
     return container.fmap([](auto&& x) { return hard_sigmoid<T>(x); });
   }
-  template <size_t M, size_t N, class T>
+  template <std::size_t M, std::size_t N, class T>
   SCENN_CONSTEXPR auto activate_prime(const Matrix<M, N, T>& container) const {
     return container.fmap([](auto&& x) { return hard_sigmoid_prime<T>(x); });
   }

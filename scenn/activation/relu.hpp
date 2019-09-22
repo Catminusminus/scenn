@@ -7,22 +7,24 @@
 namespace scenn {
 template <class T>
 SCENN_CONSTEXPR auto relu(T x) {
+  assert_arithmetic<T>();
   if (x >= 0) return x;
   return static_cast<T>(0);
 }
 
 template <class T>
 SCENN_CONSTEXPR auto relu_prime(T x) {
+  assert_arithmetic<T>();
   if (x > 0) return static_cast<T>(1);
   return static_cast<T>(0);
 }
 
 struct ReLU {
-  template <size_t M, size_t N, class T>
+  template <std::size_t M, std::size_t N, class T>
   SCENN_CONSTEXPR auto activate(const Matrix<M, N, T>& container) const {
     return container.fmap([](auto&& x) { return relu<T>(x); });
   }
-  template <size_t M, size_t N, class T>
+  template <std::size_t M, std::size_t N, class T>
   SCENN_CONSTEXPR auto activate_prime(const Matrix<M, N, T>& container) const {
     return container.fmap([](auto&& x) { return relu_prime<T>(x); });
   }

@@ -7,12 +7,14 @@
 namespace scenn {
 template <class T>
 SCENN_CONSTEXPR auto leaky_relu(T x, T alpha) {
+  assert_arithmetic<T>();
   if (x >= 0) return x;
   return alpha * x;
 }
 
 template <class T>
 SCENN_CONSTEXPR auto leaky_relu_prime(T x, T alpha) {
+  assert_arithmetic<T>();
   if (x > 0) return static_cast<T>(1);
   return alpha;
 }
@@ -23,11 +25,11 @@ class LeakyReLU {
 
  public:
   constexpr LeakyReLU(T alpha) : alpha(alpha){};
-  template <size_t M, size_t N>
+  template <std::size_t M, std::size_t N>
   SCENN_CONSTEXPR auto activate(const Matrix<M, N, T>& container) const {
     return container.fmap([=](auto&& x) { return leaky_relu<T>(x, alpha); });
   }
-  template <size_t M, size_t N>
+  template <std::size_t M, std::size_t N>
   SCENN_CONSTEXPR auto activate_prime(const Matrix<M, N, T>& container) const {
     return container.fmap(
         [=](auto&& x) { return leaky_relu_prime<T>(x, alpha); });

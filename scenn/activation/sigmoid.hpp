@@ -9,7 +9,7 @@
 namespace scenn {
 template <class T>
 SCENN_CONSTEXPR auto sigmoid(T x) {
-  assert_floating_point<T>();
+  assert_arithmetic<T>();
 
   // ref http://www.kamishima.net/mlmpyja/lr/sigmoid.html
   T sigmoid_range = 34.538776394910684;
@@ -21,7 +21,7 @@ SCENN_CONSTEXPR auto sigmoid(T x) {
 
 template <class T>
 SCENN_CONSTEXPR auto sigmoid_prime(T x) {
-  assert_floating_point<T>();
+  assert_arithmetic<T>();
   return sigmoid(x) * (1 - sigmoid(x));
 }
 

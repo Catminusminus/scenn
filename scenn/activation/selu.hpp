@@ -8,12 +8,14 @@
 namespace scenn {
 template <class T>
 SCENN_CONSTEXPR auto selu(T x, T alpha, T scale) {
+  assert_arithmetic<T>();
   if (x >= 0) return scale * x;
   return scale * alpha * (sprout::math::exp(x) - 1);
 }
 
 template <class T>
 SCENN_CONSTEXPR auto selu_prime(T x, T alpha, T scale) {
+  assert_arithmetic<T>();
   if (x > 0) return scale;
   return scale * alpha * sprout::math::exp(x);
 }
@@ -25,11 +27,11 @@ class SeLU {
   T scale = 1.05070098;
 
  public:
-  template <size_t M, size_t N>
+  template <std::size_t M, std::size_t N>
   SCENN_CONSTEXPR auto activate(const Matrix<M, N, T>& container) const {
     return container.fmap([=](auto&& x) { return selu<T>(x, alpha, scale); });
   }
-  template <size_t M, size_t N>
+  template <std::size_t M, std::size_t N>
   SCENN_CONSTEXPR auto activate_prime(const Matrix<M, N, T>& container) const {
     return container.fmap(
         [=](auto&& x) { return selu_prime<T>(x, alpha, scale); });

@@ -7,7 +7,7 @@
 
 namespace scenn {
 struct Softmax {
-  template <size_t M, size_t N, class T>
+  template <std::size_t M, std::size_t N, class T>
   SCENN_CONSTEXPR auto activate(const Matrix<M, N, T>& container) const {
     auto max = container.max_value();
     auto mat =
