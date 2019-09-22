@@ -50,12 +50,10 @@ struct Dataset {
     sprout::shuffle(shuffled_data.begin(), shuffled_data.end(), engine);
     return Dataset(std::move(shuffled_data));
   }
-  // SCENN_CONSTEXPR auto length() const { return M; }
   static constexpr auto length() { return M; }
   SCENN_CONSTEXPR auto shape() const { return std::make_pair(M, N); }
   template <size_t I, size_t J>
   SCENN_CONSTEXPR auto slice() const {
-    // return Dataset(sprout::sub_array(data, i, j));
     return Dataset<J - I, N, O, T, U>(
         sprout::copy<std::array<sprout::pair<scenn::Matrix<1, N, T>,
                                              scenn::Matrix<1, O, U>>,
