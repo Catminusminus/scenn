@@ -98,7 +98,7 @@ The example codes in the `examples` directory. The followings are in the directo
 
 This library is a header-only library.
 
-Include ```<scenn/scenn.hpp>``` and you can use all things provided by scenn except for ```load_mini_mnist_data```. To use `load_mini_mnist_data` function, you need to prepare the mnist sub-dataset by `tools/generate_mini_mnist.py` and include `<scenn/load/load.hpp>`.
+Include ```<scenn/scenn.hpp>``` and you can use all things provided by scenn except for ```load_mini_mnist_data```. To use `load_mini_mnist_data` function, you need to prepare the mnist sub-dataset by `tools/generate_mini_mnist.py` and include `<scenn/load/mini_mnist.hpp>`.
 
 ### Quick Start
 ```
