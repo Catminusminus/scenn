@@ -1,5 +1,5 @@
 #include <iostream>
-#include <scenn/load.hpp>
+#include <scenn/load/mini_mnist.hpp>
 #include <scenn/scenn.hpp>
 
 SCENN_CONSTEXPR auto mini_mnist_test() {
@@ -17,5 +17,5 @@ SCENN_CONSTEXPR auto mini_mnist_test() {
 
 int main() {
   SCENN_CONSTEXPR auto evaluation = mini_mnist_test();
-  std::cout << evaluation << std::endl;
+  std::cout << evaluation << std::endl; // We see 8 (of 10)
 }

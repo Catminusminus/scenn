@@ -26,7 +26,7 @@ class ELU {
 
  public:
   constexpr ELU(T alpha) : alpha(alpha){};
-  template <std::size_t M, std::ize_t N>
+  template <std::size_t M, std::size_t N>
   SCENN_CONSTEXPR auto activate(const Matrix<M, N, T>& container) const {
     return container.fmap([=](auto&& x) { return elu<T>(x, alpha); });
   }

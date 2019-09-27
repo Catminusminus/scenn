@@ -4,6 +4,7 @@
 #include <array>
 #include <scenn/util.hpp>
 #include <sprout/math.hpp>
+#include <type_traits>
 
 // This code is based on
 // https://github.com/ushitora-anqou/constexpr-nn/blob/master/main.cpp
@@ -75,7 +76,7 @@ struct Matrix {
     return std::move(*this)(0);
   }
 
-  template <size_t rM>
+  template <std::size_t rM>
   SCENN_CONSTEXPR auto operator+(const Matrix<rM, N, T>& rhs) const {
     static_assert(rM == 1 || rM == M);
     if (rM == 1) {
@@ -95,7 +96,8 @@ struct Matrix {
 
   // broadcast
   template <class R>
-  SCENN_CONSTEXPR auto operator+(R rhs) const {
+  SCENN_CONSTEXPR auto operator+(R rhs) const ->
+      typename std::enable_if_t<std::is_arithmetic_v<R>, Matrix<M, N, T>> {
     Matrix<M, N, T> ret;
     for (std::size_t i = 0; i < M; ++i)
       for (std::size_t j = 0; j < N; ++j) ret(i, j) = (*this)(i, j) + rhs;
@@ -113,7 +115,8 @@ struct Matrix {
   }
 
   template <class U>
-  SCENN_CONSTEXPR auto operator*(U scalar) const {
+  SCENN_CONSTEXPR auto operator*(U scalar) const ->
+      typename std::enable_if_t<std::is_arithmetic_v<U>, Matrix<M, N, T>> {
     Matrix<M, N, T> ret;
     for (std::size_t i = 0; i < M; ++i)
       for (std::size_t j = 0; j < N; ++j) ret(i, j) = (*this)(i, j) * scalar;
@@ -121,12 +124,14 @@ struct Matrix {
   }
 
   template <class U>
-  SCENN_CONSTEXPR auto operator/(U scalar) const& {
+  SCENN_CONSTEXPR auto operator/(U scalar) const& ->
+      typename std::enable_if_t<std::is_arithmetic_v<U>, Matrix<M, N, T>> {
     return *this * (1. / scalar);
   }
 
   template <class U>
-  SCENN_CONSTEXPR auto operator/(U scalar) && {
+  SCENN_CONSTEXPR auto operator/(U scalar) && ->
+      typename std::enable_if_t<std::is_arithmetic_v<U>, Matrix<M, N, T>> {
     return std::move(*this) * (1. / scalar);
   }
 

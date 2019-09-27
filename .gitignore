@@ -5,4 +5,9 @@
 **/x_train
 **/y_test
 **/y_train
+**/x_test_*
+**/x_train_*
+**/y_test_*
+**/y_train_*
 **/mnist.npz
+**/ember_2017_2/*
