@@ -3,7 +3,7 @@
 ![GitHub](https://img.shields.io/github/license/Catminusminus/scenn?style=for-the-badge)
 ![GitHub top language](https://img.shields.io/github/languages/top/Catminusminus/scenn?style=for-the-badge)
 
-Proof of concept of sequential models of neural networks in compile time.
+Proof of concept of sequential models of constexpr neural networks. You can do image classification, malware detection (binary classification) and so on in compile time with this library.
 
 <strong>Alpha Stage</strong>
 
@@ -81,6 +81,13 @@ int main() {
 }
 ```
 
+## Examples
+The example codes in the `examples` directory. The followings are in the directory.
+- XOR
+- MNIST
+- Malware Detection
+  - You need the [ember](https://github.com/endgameinc/ember) dataset to run this example. The citation is `H. Anderson and P. Roth, "EMBER: An Open Dataset for Training Static PE Malware Machine Learning Models”, in ArXiv e-prints. Apr. 2018.`
+
 ## How to use?
 
 ### Requirements
@@ -91,7 +98,7 @@ int main() {
 
 This library is a header-only library.
 
-Include ```<scenn/scenn.hpp>``` and you can use all things provided by scenn except for ```load_mini_mnist_data```. To use `load_mini_mnist_data` function, you need to prepare the mnist sub-dataset by `tools/generate_mini_mnist.py` and include `<scenn/load.hpp>`.
+Include ```<scenn/scenn.hpp>``` and you can use all things provided by scenn except for ```load_mini_mnist_data```. To use `load_mini_mnist_data` function, you need to prepare the mnist sub-dataset by `tools/generate_mini_mnist.py` and include `<scenn/load/mini_mnist.hpp>`.
 
 ### Quick Start
 ```

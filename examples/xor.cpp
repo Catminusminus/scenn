@@ -22,5 +22,5 @@ SCENN_CONSTEXPR auto test() {
 
 int main() {
   SCENN_CONSTEXPR auto evaluation = test();
-  std::cout << evaluation << std::endl;
+  std::cout << evaluation << std::endl; // We see 4 (of 4)
 }
