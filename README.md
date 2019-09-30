@@ -91,8 +91,9 @@ The example codes in the `examples` directory. The followings are in the directo
 ## How to use?
 
 ### Requirements
-
+- Clang 6+
 - [Sprout C++ Libraries](https://github.com/bolero-MURAKAMI/Sprout)
+- Python 3.7 (Optional)
 
 ### Install
 
