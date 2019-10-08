@@ -22,6 +22,24 @@ class Tensor3D {
 
   static SCENN_CONSTEXPR auto shape() { return std::make_pair(L, M, N); }
 
+  SCENN_CONSTEXPR auto operator()(size_type i, size_type j, size_type k) const {
+    return data[i][j][k];
+  }
+  SCENN_CONSTEXPR decltype(auto) operator()(size_type i, size_type j, size_type k) {
+    return data[i][j][k];
+  }
+
+  // for matrix-like tensor
+  SCENN_CONSTEXPR auto operator()(size_type i, size_type j) const { static_assert(M == 1); return data[0][i][j]; }
+  SCENN_CONSTEXPR decltype(auto) operator()(size_type i, size_type j) { static_assert(M == 1); return data[0][i][j]; }
+  SCENN_CONSTEXPR auto operator[](size_type i, size_type j) const { static_assert(M == 1); return (*this)(i, j); }
+  SCENN_CONSTEXPR decltype(auto) operator[](size_type i, size_type j) { static_assert(M == 1); return (*this)(i, j); }
+
+  // for vector-like tensor
+  SCENN_CONSTEXPR auto operator()(size_type i) const { static_assert(L == 1 && M == 1); return data[0][0][i]; }
+  SCENN_CONSTEXPR decltype(auto) operator()(size_type i) { static_assert(L == 1 && M == 1); return data[0][0][i]; }
+  SCENN_CONSTEXPR auto operator[](size_type i) const { static_assert(L == 1 && M == 1); return (*this)(i); }
+  SCENN_CONSTEXPR decltype(auto) operator[](size_type i) { static_assert(L == 1 && M == 1); return (*this)(i); }
 };
 } //namespace scenn::experimental
 
