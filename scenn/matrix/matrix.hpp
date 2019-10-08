@@ -17,11 +17,11 @@ SCENN_CONSTEXPR auto is_same_value(T lhs, U rhs) {
   return true;
 }
 
-template <size_t M, size_t N, class T>
+template <std::size_t M, std::size_t N, class T>
 struct Matrix;
-template <size_t N, class T>
+template <std::size_t N, class T>
 using Vector = Matrix<1, N, T>;
-template <size_t M, size_t N, class T>
+template <std::size_t M, std::size_t N, class T>
 struct Matrix {
   using value_type = T;
   using size_type = std::size_t;
@@ -33,15 +33,6 @@ struct Matrix {
 
   SCENN_CONSTEXPR Matrix() : data{} { static_assert(N >= 1 && M >= 1); }
   SCENN_CONSTEXPR auto shuffle() const { return (*this); }
-
-  template <std::size_t I, std::size_t J>
-  SCENN_CONSTEXPR auto slice() const {
-    static_assert(0 <= I && I < N && 0 <= J && J < M);
-    Matrix<I, J, T> ret;
-    for (std::size_t i = I; i < J; ++i)
-      for (std::size_t j = 0; j < N; ++j) ret.data[i][j] = data[i][j];
-    return ret;
-  }
 
   SCENN_CONSTEXPR auto transposed() const {
     Matrix<N, M, T> ret;
