@@ -6,7 +6,7 @@
 
 template <class T>
 SCENN_CONSTEXPR auto assert_arithmetic() {
-  if constexpr (!std::is_arithmetic_v<T>) static_assert([] { return false; }());
+  static_assert(std::is_arithmetic_v<T>);
 }
 
 #endif
