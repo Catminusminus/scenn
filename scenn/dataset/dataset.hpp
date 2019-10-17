@@ -13,7 +13,7 @@
 #include <utility>
 
 namespace {
-template <size_t M, size_t N, size_t O, class T, class U>
+template <std::size_t M, std::size_t N, std::size_t O, class T, class U>
 SCENN_CONSTEXPR auto make_dataset(scenn::Matrix<M, N, T>&& x,
                                   scenn::Matrix<M, O, U>&& y) {
   std::array<sprout::pair<scenn::Matrix<1, N, T>, scenn::Matrix<1, O, U>>, M>
@@ -24,7 +24,7 @@ SCENN_CONSTEXPR auto make_dataset(scenn::Matrix<M, N, T>&& x,
   return data;
 }
 
-template <size_t M, size_t N, size_t O, class T, class U>
+template <std::size_t M, std::size_t N, std::size_t O, class T, class U>
 struct Dataset {
   std::array<sprout::pair<scenn::Matrix<1, N, T>, scenn::Matrix<1, O, U>>, M>
       data;
@@ -52,7 +52,7 @@ struct Dataset {
   }
   static constexpr auto length() { return M; }
   SCENN_CONSTEXPR auto shape() const { return std::make_pair(M, N); }
-  template <size_t I, size_t J>
+  template <std::size_t I, std::size_t J>
   SCENN_CONSTEXPR auto slice() const {
     return Dataset<J - I, N, O, T, U>(
         sprout::copy<std::array<sprout::pair<scenn::Matrix<1, N, T>,
