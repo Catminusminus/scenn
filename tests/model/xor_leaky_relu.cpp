@@ -9,8 +9,7 @@ SCENN_CONSTEXPR auto test() {
   using namespace scenn;
   double X_arr[4][2] = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
   double Y_arr[4][2] = {{1, 0}, {0, 1}, {0, 1}, {1, 0}};
-  auto dataset = Dataset(make_matrix_from_array(std::move(X_arr)),
-                         make_matrix_from_array(std::move(Y_arr)));
+  auto dataset = Dataset(std::move(X_arr), std::move(Y_arr));
   auto trained_model =
       SequentialNetwork(BinaryCrossEntropy(), DenseLayer<2, 4, double>(),
                         ActivationLayer<4, double>(LeakyReLU(0.3)),
@@ -20,6 +19,4 @@ SCENN_CONSTEXPR auto test() {
   return trained_model.evaluate(std::move(dataset));
 }
 
-int main() {
-  [[maybe_unused]] SCENN_CONSTEXPR auto evaluation = test();
-}
+int main() { [[maybe_unused]] SCENN_CONSTEXPR auto evaluation = test(); }
