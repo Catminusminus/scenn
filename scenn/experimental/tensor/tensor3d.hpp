@@ -204,16 +204,23 @@ struct Tensor3D {
         for (std::size_t j = 0; j < M; ++j)
           for (std::size_t k = 0; k < N; ++k) ret(i, j, k) = data[i][j][k];
       return ret;
-    }
-    if constexpr (Index == 1) {
+    } else if constexpr (Index == 1) {
       static_assert(0 <= I && I < J && J <= M);
       Tensor3D<L, J - I, N, T> ret;
       for (std::size_t i = 0; i < L; ++i)
         for (std::size_t j = I; j < J; ++j)
           for (std::size_t k = 0; k < N; ++k) ret(i, j, k) = data[i][j][k];
       return ret;
+    } else if constexpr (Index == 2) {
+      static_assert(0 <= I && I < J && J <= N);
+      Tensor3D<L, M, J - I, T> ret;
+      for (std::size_t i = 0; i < L; ++i)
+        for (std::size_t j = 0; j < M; ++j)
+          for (std::size_t k = I; k < J; ++k) ret(i, j, k) = data[i][j][k];
+      return ret;
+    } else {
+      static_assert([] { return false; }(), "Index must be 0, 1, or 2");
     }
-    static_assert([] { return false; });
   }
 };
 template <std::size_t lL, std::size_t lM, std::size_t lN, class lT,
