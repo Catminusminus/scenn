@@ -161,12 +161,14 @@ So many limitaions exist...
 
 Thanks to [Sprout C++ Libraries](https://github.com/bolero-MURAKAMI/Sprout)
 
-## Important Disclosure
+## Citation
 
 This project is inspired by a neural network in [dlgo](https://github.com/maxpumperla/deep_learning_and_the_game_of_go/tree/master/code/dlgo/nn).
 
 scenn/matrix/matrix.hpp is based on https://github.com/ushitora-anqou/constexpr-nn/blob/master/main.cpp.
 The license file is LICENSE.constexpr-nn.
+
+The experimental implementation of CNN is inspired by [Hajimeteno Deep Learning](https://www.sbcr.jp/product/4797396812/).
 
 ## Author
 
