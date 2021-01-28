@@ -11,3 +11,5 @@
 **/y_train_*
 **/mnist.npz
 **/ember_2017_2/*
+**/train_fizzbuzz_*
+**/test_fizzbuzz_*
