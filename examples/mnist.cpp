@@ -17,5 +17,5 @@ SCENN_CONSTEXPR auto mini_mnist_test() {
 
 int main() {
   SCENN_CONSTEXPR auto evaluation = mini_mnist_test();
-  std::cout << evaluation << std::endl; // We see 8 (of 10)
+  std::cout << evaluation << std::endl;  // We see 8 (of 10)
 }
